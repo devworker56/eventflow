@@ -42,6 +42,14 @@ require_once 'includes/header.php';
             background-color: var(--nasdaq-dark-blue);
             border-color: var(--nasdaq-dark-blue);
         }
+        .btn-outline-nasdaq-blue {
+            border-color: var(--nasdaq-blue);
+            color: var(--nasdaq-blue);
+        }
+        .btn-outline-nasdaq-blue:hover {
+            background-color: var(--nasdaq-blue);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -108,32 +116,47 @@ require_once 'includes/header.php';
             <div class="row h-100 align-items-center">
                 <div class="col-lg-8">
                     <h1 class="display-4 fw-bold mb-4">
-                        AI-Powered Event Intelligence for <span class="text-nasdaq-blue">Systematic Traders</span>
+                        Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span> for Superior Equity Predictions
                     </h1>
                     <p class="lead mb-4">
-                        Decode market expectations across 7 asset classes. Predict ripple effects before they unfold.
-                        Optimize hedging in real-time. All in one unified platform.
+                        Traditional equity analysis misses 70% of the story. We analyze <strong>options volatility surfaces</strong>, 
+                        <strong>futures term structures</strong>, and <strong>fixed income spreads</strong> to predict stock movements 
+                        with 40% higher accuracy.
                     </p>
                     <div class="d-flex flex-wrap gap-3">
                         <a href="register.php" class="btn btn-nasdaq-blue btn-lg px-4">
                             <i class="bi bi-lightning-charge-fill me-2"></i>Start Free Trial
                         </a>
-                        <a href="#demo" class="btn btn-outline-light btn-lg px-4">
-                            <i class="bi bi-play-circle me-2"></i>Watch Demo
+                        <a href="#how-it-works" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-play-circle me-2"></i>See How It Works
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-4 d-none d-lg-block">
                     <div class="card bg-dark border-nasdaq-blue">
                         <div class="card-body">
-                            <h5 class="card-title text-nasdaq-blue">Live Signal Preview</h5>
-                            <div id="liveSignalPreview">
-                                <!-- Will be populated by JavaScript -->
-                                <div class="text-center py-4">
-                                    <div class="spinner-border text-nasdaq-blue" role="status">
-                                        <span class="visually-hidden">Loading...</span>
+                            <h5 class="card-title text-nasdaq-blue">Live Equity Signal</h5>
+                            <div class="signal-preview">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="symbol-icon bg-nasdaq-blue rounded-circle p-2 me-3">
+                                        <i class="bi bi-graph-up text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">AAPL</h6>
+                                        <small class="text-muted">Earnings in 2 days</small>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <span class="badge bg-success">+82% Confidence</span>
                                     </div>
                                 </div>
+                                <div class="mb-3">
+                                    <small class="text-muted">Derivatives Signal:</small>
+                                    <p class="mb-1">Options IV suggests 8.2% move priced in</p>
+                                    <small class="text-muted">Our AI predicts: <strong class="text-success">+5.3%</strong></p>
+                                </div>
+                                <button class="btn btn-sm btn-outline-nasdaq-blue w-100">
+                                    View Full Analysis
+                                </button>
                             </div>
                         </div>
                     </div>
