@@ -9,7 +9,7 @@ require_once 'includes/header.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventFlow Institutional - AI-Powered Event Intelligence</title>
+    <title>AccuTrading Signals - AI-Powered Event Intelligence</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -58,8 +58,8 @@ require_once 'includes/header.php';
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
                 <img src="assets/images/logo.png" alt="EventFlow" height="40" class="me-2">
-                <span class="fw-bold text-nasdaq-blue">EventFlow</span>
-                <span class="text-light ms-1">Institutional</span>
+                <span class="fw-bold text-nasdaq-blue">AccTrading</span>
+                <span class="text-light ms-1">Signals</span>
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
