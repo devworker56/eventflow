@@ -4,9 +4,9 @@
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top border-bottom border-nasdaq-blue">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="https://accutradingsignals.com/">
-            <span class="fw-bold text-nasdaq-blue">AccuTrading</span>
-            <span class="text-light ms-1">Signals</span>
+        <a class="navbar-brand d-flex align-items-center" href="index.php">
+            <span class="fw-bold text-nasdaq-blue">EventFlow</span>
+            <span class="text-light ms-1">Institutional</span>
         </a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -16,7 +16,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="https://accutradingsignals.com/">Home</a>
+                    <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="features.php">Features</a>
