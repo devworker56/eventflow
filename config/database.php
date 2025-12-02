@@ -3,7 +3,7 @@
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'u834808878_eventflow_db');
 define('DB_USER', 'u834808878_eventflow_adm');
-define('DB_PASS', '');
+define('DB_PASS', 'Ossouka@1968');
 
 // Create connection
 function getDBConnection() {
