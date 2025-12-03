@@ -6,17 +6,14 @@ RewriteCond %{HTTPS} off
 RewriteCond %{HTTP_HOST} !^localhost
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Block access to sensitive directories
-RewriteRule ^(config|includes|modules) - [F,L]
+# Block DIRECT ACCESS to sensitive directories via browser
+# But allow PHP includes (REQUEST_FILENAME check)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(config|includes|modules)/ - [F,L]
 
-# Protect specific files in admin directory (not the whole directory)
-RewriteCond %{REQUEST_URI} ^/admin/(config|database|private)
-RewriteRule ^ - [F,L]
-
-# Remove .php extension from URLs (FIXED VERSION)
-# Only remove .php if NOT already ending with .php
+# Remove .php extension from URLs
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L]
 
@@ -27,7 +24,7 @@ RewriteRule ^(.+)$ $1.php [L]
 </Files>
 
 # Protect config files
-<FilesMatch "\.(config|sql|log|ini)$">
+<FilesMatch "^(config|database|stripe-config)\.php$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>
