@@ -7,7 +7,11 @@ RewriteCond %{HTTP_HOST} !^localhost
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Block access to sensitive directories
-RewriteRule ^(config|includes|modules|admin/.*|api/.*) - [F,L]
+RewriteRule ^(config|includes|modules) - [F,L]
+
+# Protect specific files in admin directory (not the whole directory)
+RewriteCond %{REQUEST_URI} ^/admin/(config|database|private)
+RewriteRule ^ - [F,L]
 
 # Remove .php extension from URLs
 RewriteCond %{REQUEST_FILENAME} !-d
