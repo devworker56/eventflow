@@ -1,7 +1,81 @@
 <?php
 session_start();
+require_once 'config/database.php'; // Only include if we need database access
+require_once 'includes/auth-functions.php'; // Only include if we need auth functions
+
 $page_title = "Features - EventFlow Institutional";
 $page_description = "See how EventFlow uses options, futures, and fixed income data to generate superior equity predictions.";
+
+// Check if user is logged in and get their tier if available
+$userLoggedIn = false;
+$userTier = null;
+$userEmail = null;
+
+if(isset($_SESSION['user_id'])) {
+    $userLoggedIn = true;
+    try {
+        $pdo = getDBConnection();
+        $stmt = $pdo->prepare("SELECT email, subscription_tier FROM users WHERE id = ?");
+        $stmt->execute([$_SESSION['user_id']]);
+        $user = $stmt->fetch();
+        if($user) {
+            $userTier = $user['subscription_tier'];
+            $userEmail = $user['email'];
+        }
+    } catch(Exception $e) {
+        // Silently fail - this is a public page
+    }
+}
+
+// Define which features are available at each tier
+$tierFeatures = [
+    'standard' => [
+        'title' => 'Standard',
+        'color' => 'text-muted',
+        'badge' => 'bg-secondary',
+        'features' => [
+            'Basic Event Calendar',
+            'Delayed Signals (30 min)',
+            'Options IV Analysis (10 stocks)',
+            'Basic Sentiment Analysis',
+            'Email Alerts',
+            '1 Watchlist',
+            'Community Access'
+        ]
+    ],
+    'pro' => [
+        'title' => 'Pro',
+        'color' => 'text-nasdaq-blue',
+        'badge' => 'bg-nasdaq-blue',
+        'features' => [
+            'Real-time Signal Feed',
+            'Advanced Options Scanner',
+            'Futures Correlation Analysis',
+            'Fixed Income Alpha Signals',
+            'SMS/Webhook Alerts',
+            'Backtesting Suite',
+            'API Access (10K/mo)',
+            '5 Watchlists',
+            'Priority Support'
+        ]
+    ],
+    'premium' => [
+        'title' => 'Premium',
+        'color' => 'text-nasdaq-green',
+        'badge' => 'bg-nasdaq-green',
+        'features' => [
+            'White-label Solutions',
+            'Unlimited API Access',
+            'Custom Model Training',
+            'Dedicated Infrastructure',
+            'Historical Data Exports',
+            'Account Manager',
+            'Custom Development',
+            'Unlimited Watchlists',
+            '24/7 Premium Support'
+        ]
+    ]
+];
 ?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -18,9 +92,32 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
 <body>
     <?php include 'includes/header.php'; ?>
     
-    <!-- Hero Section -->
+    <!-- Hero Section with User Context -->
     <section class="py-5" style="padding-top: 100px !important; background: linear-gradient(135deg, #000 0%, var(--nasdaq-dark-gray) 100%);">
         <div class="container">
+            <?php if($userLoggedIn && $userTier): ?>
+            <!-- Logged-in User Welcome -->
+            <div class="alert alert-dark border-nasdaq-blue mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-person-check text-nasdaq-blue me-2"></i>
+                        Welcome back, <?php echo htmlspecialchars($userEmail); ?>! 
+                        You're currently on the <span class="badge <?php echo $tierFeatures[$userTier]['badge']; ?> ms-1"><?php echo ucfirst($userTier); ?></span> plan.
+                    </div>
+                    <div>
+                        <?php if($userTier !== 'premium'): ?>
+                        <a href="subscription/" class="btn btn-sm btn-outline-nasdaq-blue">
+                            <i class="bi bi-arrow-up-circle me-1"></i> Upgrade Plan
+                        </a>
+                        <?php endif; ?>
+                        <a href="dashboard/" class="btn btn-sm btn-nasdaq-blue ms-2">
+                            <i class="bi bi-speedometer2 me-1"></i> Go to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+            
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h1 class="display-4 fw-bold mb-4">
@@ -34,9 +131,15 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                         <a href="#how-it-works" class="btn btn-nasdaq-blue btn-lg px-4">
                             <i class="bi bi-play-circle me-2"></i>See How It Works
                         </a>
+                        <?php if(!$userLoggedIn): ?>
                         <a href="register.php" class="btn btn-outline-light btn-lg px-4">
                             <i class="bi bi-lightning-charge me-2"></i>Start Free Trial
                         </a>
+                        <?php else: ?>
+                        <a href="#pricing" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-credit-card me-2"></i>Compare Plans
+                        </a>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -95,6 +198,17 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                                     <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Unusual Options Activity</li>
                                 </ul>
                             </div>
+                            <?php if($userLoggedIn): ?>
+                            <div class="mt-4">
+                                <a href="dashboard/?module=options" class="btn btn-sm btn-outline-nasdaq-blue w-100">
+                                    <?php if($userTier === 'standard'): ?>
+                                    <i class="bi bi-lock me-1"></i> Upgrade for Options Intelligence
+                                    <?php else: ?>
+                                    <i class="bi bi-arrow-right me-1"></i> Open Options Module
+                                    <?php endif; ?>
+                                </a>
+                            </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -121,6 +235,17 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                                     <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Index Futures Roll</li>
                                 </ul>
                             </div>
+                            <?php if($userLoggedIn): ?>
+                            <div class="mt-4">
+                                <a href="dashboard/?module=futures" class="btn btn-sm btn-outline-nasdaq-green w-100">
+                                    <?php if($userTier === 'standard'): ?>
+                                    <i class="bi bi-lock me-1"></i> Upgrade for Futures Analysis
+                                    <?php else: ?>
+                                    <i class="bi bi-arrow-right me-1"></i> Open Futures Module
+                                    <?php endif; ?>
+                                </a>
+                            </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -147,6 +272,17 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                                     <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Inflation Expectations</li>
                                 </ul>
                             </div>
+                            <?php if($userLoggedIn): ?>
+                            <div class="mt-4">
+                                <a href="dashboard/?module=fixed_income" class="btn btn-sm btn-outline-nasdaq-light-blue w-100">
+                                    <?php if($userTier !== 'premium'): ?>
+                                    <i class="bi bi-lock me-1"></i> Premium Feature Only
+                                    <?php else: ?>
+                                    <i class="bi bi-arrow-right me-1"></i> Open Fixed Income Module
+                                    <?php endif; ?>
+                                </a>
+                            </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -154,8 +290,68 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
         </div>
     </section>
 
+    <!-- Pricing / Tier Comparison Section -->
+    <section class="py-5 bg-black" id="pricing">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Choose Your Plan</h2>
+                <p class="lead text-muted">Start with Standard, upgrade as you grow</p>
+            </div>
+            
+            <div class="row g-4">
+                <?php foreach($tierFeatures as $tierKey => $tierInfo): 
+                    $isCurrentTier = ($userLoggedIn && $userTier === $tierKey);
+                ?>
+                <div class="col-md-4">
+                    <div class="card h-100 bg-dark <?php echo $isCurrentTier ? 'border-nasdaq-blue shadow-lg' : 'border-secondary'; ?>">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <h4 class="card-title <?php echo $tierInfo['color']; ?>">
+                                    <?php echo $tierInfo['title']; ?>
+                                </h4>
+                                <?php if($isCurrentTier): ?>
+                                <span class="badge bg-nasdaq-blue">Current Plan</span>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <ul class="list-unstyled mb-4">
+                                <?php foreach($tierInfo['features'] as $feature): ?>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-nasdaq-green me-2"></i>
+                                    <?php echo $feature; ?>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            
+                            <div class="mt-auto">
+                                <?php if(!$userLoggedIn): ?>
+                                <a href="register.php?tier=<?php echo $tierKey; ?>" class="btn <?php echo $tierKey === 'pro' ? 'btn-nasdaq-blue' : 'btn-outline-light'; ?> w-100">
+                                    <?php if($tierKey === 'standard'): ?>
+                                    Start Free Trial
+                                    <?php else: ?>
+                                    Get Started
+                                    <?php endif; ?>
+                                </a>
+                                <?php else: ?>
+                                    <?php if($isCurrentTier): ?>
+                                    <button class="btn btn-outline-light w-100" disabled>Current Plan</button>
+                                    <?php else: ?>
+                                    <a href="subscription/?upgrade_to=<?php echo $tierKey; ?>" class="btn <?php echo $tierKey === 'pro' ? 'btn-nasdaq-blue' : 'btn-outline-light'; ?> w-100">
+                                        Upgrade to <?php echo $tierInfo['title']; ?>
+                                    </a>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
     <!-- Platform Features -->
-    <section class="py-5 bg-black">
+    <section class="py-5 bg-dark">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="display-5 fw-bold mb-3">Platform Capabilities</h2>
@@ -174,6 +370,9 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                                 Live feed of equity signals generated from derivatives data. Filter by sector, 
                                 confidence level, or time horizon.
                             </p>
+                            <?php if($userLoggedIn && $userTier === 'standard'): ?>
+                            <small class="text-warning"><i class="bi bi-clock me-1"></i> Standard: 30-min delayed signals</small>
+                            <?php endif; ?>
                         </div>
                     </div>
                     
@@ -187,6 +386,9 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                                 Test our signals against historical data. See win rates, Sharpe ratios, and 
                                 maximum drawdowns for any strategy.
                             </p>
+                            <?php if($userLoggedIn && $userTier === 'standard'): ?>
+                            <small class="text-warning"><i class="bi bi-lock me-1"></i> Available on Pro+</small>
+                            <?php endif; ?>
                         </div>
                     </div>
                     
@@ -200,6 +402,9 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                                 Get notified via email, SMS, or webhook when key derivatives signals trigger 
                                 for your watchlist stocks.
                             </p>
+                            <?php if($userLoggedIn && $userTier === 'standard'): ?>
+                            <small class="text-warning"><i class="bi bi-envelope me-1"></i> Standard: Email only</small>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -215,6 +420,9 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                                 Visualize how options, futures, and fixed income data correlate with 
                                 individual stocks and sectors.
                             </p>
+                            <?php if($userLoggedIn && $userTier === 'standard'): ?>
+                            <small class="text-warning"><i class="bi bi-lock me-1"></i> Available on Pro+</small>
+                            <?php endif; ?>
                         </div>
                     </div>
                     
@@ -241,6 +449,15 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
                                 Integrate our signals into your own trading systems, research platforms, 
                                 or portfolio management tools.
                             </p>
+                            <?php if($userLoggedIn): ?>
+                                <?php if($userTier === 'standard'): ?>
+                                <small class="text-warning"><i class="bi bi-lock me-1"></i> Available on Pro+</small>
+                                <?php elseif($userTier === 'pro'): ?>
+                                <small class="text-info"><i class="bi bi-infinity me-1"></i> Pro: 10,000 calls/month</small>
+                                <?php else: ?>
+                                <small class="text-success"><i class="bi bi-infinity me-1"></i> Premium: Unlimited</small>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -249,19 +466,41 @@ $page_description = "See how EventFlow uses options, futures, and fixed income d
     </section>
 
     <!-- CTA Section -->
-    <section class="py-5 bg-dark">
+    <section class="py-5 bg-black">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center">
-                    <h2 class="display-5 fw-bold mb-4">Ready to See the Future of Stock Prediction?</h2>
+                    <h2 class="display-5 fw-bold mb-4">
+                        <?php if($userLoggedIn): ?>
+                        Ready to Unlock More Features?
+                        <?php else: ?>
+                        Ready to See the Future of Stock Prediction?
+                        <?php endif; ?>
+                    </h2>
                     <p class="lead mb-4">
+                        <?php if($userLoggedIn): ?>
+                        Upgrade your plan to access advanced features and increase your API limits.
+                        <?php else: ?>
                         Join hedge funds, proprietary trading firms, and sophisticated investors 
                         who use derivatives intelligence to stay ahead of the market.
+                        <?php endif; ?>
                     </p>
+                    <?php if(!$userLoggedIn): ?>
                     <a href="register.php" class="btn btn-nasdaq-blue btn-lg px-5">
                         <i class="bi bi-lightning-charge-fill me-2"></i>Start Your Free Trial
                     </a>
                     <p class="text-muted mt-3">No credit card required • 14-day full access</p>
+                    <?php elseif($userTier !== 'premium'): ?>
+                    <a href="subscription/" class="btn btn-nasdaq-green btn-lg px-5">
+                        <i class="bi bi-arrow-up-circle-fill me-2"></i>Upgrade Your Plan
+                    </a>
+                    <p class="text-muted mt-3">Unlock all features and higher limits</p>
+                    <?php else: ?>
+                    <a href="dashboard/" class="btn btn-nasdaq-blue btn-lg px-5">
+                        <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                    </a>
+                    <p class="text-muted mt-3">You're on our highest tier. Thank you for being a premium customer!</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
