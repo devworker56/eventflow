@@ -1,34 +1,45 @@
 <?php
 // config/stripe-config.php
-// Stripe Configuration - SANDBOX ENVIRONMENT
+// Stripe Configuration using Environment Variables
 
-// Load Composer dependencies if using Stripe PHP library
-// require_once __DIR__ . '/../vendor/autoload.php';
+// Load Composer autoloader for Stripe PHP library and dotenv
+require_once __DIR__ . '/../vendor/autoload.php';
 
-// IMPORTANT: Use your sandbox/test keys here
-// Get these from: https://dashboard.stripe.com/test/apikeys
+// Load environment variables
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
-// Test Publishable Key (for client-side)
-define('STRIPE_PUBLISHABLE_KEY', 'pk_test_51SaM5cBSIo2mkGlffLpilJsMntrmLpjwkf3Eo5BvBtQIclatzbepy58CFmKjCpnQ3XSJLKf3G7Bt0U4GjSoAUGPL00larzYu8j');
+// Get Stripe keys from environment with validation
+$stripeSecretKey = $_ENV['STRIPE_SECRET_KEY'] ?? '';
+$stripePublishableKey = $_ENV['STRIPE_PUBLISHABLE_KEY'] ?? '';
+$stripeWebhookSecret = $_ENV['STRIPE_WEBHOOK_SECRET'] ?? '';
 
-// Test Secret Key (for server-side) - YOU NEED TO ROTATE THIS KEY!
-define('STRIPE_SECRET_KEY', 'sk_test_51SaM5cBSIo2mkGlffLpilJsMntrmLpjwkf3Eo5BvBtQIclatzbepy58CFmKjCpnQ3XSJLKf3G7Bt0U4GjSoAUGPL00larzYu8j');
+// Validate that required keys are present
+if (empty($stripeSecretKey)) {
+    throw new Exception('STRIPE_SECRET_KEY is not set in .env file');
+}
 
-// Webhook secret for verifying webhook signatures
-// Get from: Stripe Dashboard → Developers → Webhooks → Find your webhook → Reveal
-define('STRIPE_WEBHOOK_SECRET', 'whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+if (empty($stripePublishableKey)) {
+    throw new Exception('STRIPE_PUBLISHABLE_KEY is not set in .env file');
+}
 
-// Set timezone
-date_default_timezone_set('America/New_York');
-
-// Initialize Stripe with your secret key
-\Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
+// Set Stripe API configuration
+\Stripe\Stripe::setApiKey($stripeSecretKey);
 \Stripe\Stripe::setApiVersion('2023-10-16'); // Use latest stable version
 
-// Subscription plans mapping - Updated to match your database
+// Define constants for use throughout the application
+define('STRIPE_PUBLISHABLE_KEY', $stripePublishableKey);
+define('STRIPE_SECRET_KEY', $stripeSecretKey);
+define('STRIPE_WEBHOOK_SECRET', $stripeWebhookSecret);
+
+// Set timezone from environment or default
+$timezone = $_ENV['APP_TIMEZONE'] ?? 'America/New_York';
+date_default_timezone_set($timezone);
+
+// Subscription plans mapping - Updated to match your database schema
 $stripePlans = [
     'standard' => [
-        'monthly' => 'price_standard_monthly',  // Create these in Stripe Dashboard
+        'monthly' => 'price_standard_monthly',
         'annual' => 'price_standard_annual'
     ],
     'pro' => [
@@ -44,7 +55,14 @@ $stripePlans = [
 // Trial period in days
 define('TRIAL_PERIOD_DAYS', 14);
 
-// Create Stripe customer
+/**
+ * Create a Stripe customer
+ * 
+ * @param string $email Customer email
+ * @param string $name Customer name
+ * @param array $metadata Additional metadata
+ * @return \Stripe\Customer|false
+ */
 function createStripeCustomer($email, $name, $metadata = []) {
     try {
         $customerData = [
@@ -52,7 +70,8 @@ function createStripeCustomer($email, $name, $metadata = []) {
             'name' => $name,
             'metadata' => array_merge([
                 'signup_date' => date('Y-m-d'),
-                'platform' => 'EventFlow'
+                'platform' => 'EventFlow',
+                'app_env' => $_ENV['APP_ENV'] ?? 'production'
             ], $metadata)
         ];
         
@@ -63,7 +82,15 @@ function createStripeCustomer($email, $name, $metadata = []) {
     }
 }
 
-// Create subscription with trial
+/**
+ * Create a subscription with trial period
+ * 
+ * @param string $customerId Stripe customer ID
+ * @param string $priceId Stripe price ID
+ * @param string|null $paymentMethodId Optional payment method ID
+ * @param int $trialDays Trial period in days
+ * @return \Stripe\Subscription|false
+ */
 function createSubscription($customerId, $priceId, $paymentMethodId = null, $trialDays = TRIAL_PERIOD_DAYS) {
     try {
         $subscriptionData = [
@@ -73,7 +100,10 @@ function createSubscription($customerId, $priceId, $paymentMethodId = null, $tri
             ]],
             'payment_behavior' => 'default_incomplete',
             'expand' => ['latest_invoice.payment_intent'],
-            'trial_period_days' => $trialDays
+            'trial_period_days' => $trialDays,
+            'metadata' => [
+                'app_env' => $_ENV['APP_ENV'] ?? 'production'
+            ]
         ];
         
         // Attach payment method if provided
@@ -88,23 +118,53 @@ function createSubscription($customerId, $priceId, $paymentMethodId = null, $tri
     }
 }
 
-// Verify webhook signature
+/**
+ * Verify Stripe webhook signature
+ * 
+ * @return \Stripe\Event
+ * @throws \UnexpectedValueException|\Stripe\Exception\SignatureVerificationException
+ */
 function verifyStripeWebhook() {
     $payload = @file_get_contents('php://input');
     $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
     
-    try {
-        return \Stripe\Webhook::constructEvent(
-            $payload, $sig_header, STRIPE_WEBHOOK_SECRET
-        );
-    } catch(\UnexpectedValueException $e) {
-        // Invalid payload
-        http_response_code(400);
-        exit();
-    } catch(\Stripe\Exception\SignatureVerificationException $e) {
-        // Invalid signature
-        http_response_code(400);
-        exit();
+    if (empty(STRIPE_WEBHOOK_SECRET)) {
+        throw new Exception('STRIPE_WEBHOOK_SECRET is not configured');
     }
+    
+    return \Stripe\Webhook::constructEvent(
+        $payload, $sig_header, STRIPE_WEBHOOK_SECRET
+    );
+}
+
+/**
+ * Get the correct Stripe price ID for a plan and billing period
+ * 
+ * @param string $plan Plan name (standard/pro/premium)
+ * @param string $billing Billing period (monthly/annual)
+ * @return string|null Price ID or null if not found
+ */
+function getStripePriceId($plan, $billing) {
+    global $stripePlans;
+    
+    if (!isset($stripePlans[$plan])) {
+        return null;
+    }
+    
+    return $stripePlans[$plan][$billing] ?? null;
+}
+
+/**
+ * Check if running in test mode
+ * 
+ * @return bool
+ */
+function isStripeTestMode() {
+    return strpos(STRIPE_SECRET_KEY, 'sk_test_') === 0;
+}
+
+// Log Stripe mode for debugging
+if ($_ENV['APP_DEBUG'] ?? false) {
+    error_log('Stripe initialized in ' . (isStripeTestMode() ? 'TEST' : 'LIVE') . ' mode');
 }
 ?>
