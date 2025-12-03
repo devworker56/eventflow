@@ -58,7 +58,7 @@ require_once 'includes/header.php';
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
                 <img src="assets/images/logo.png" alt="EventFlow" height="40" class="me-2">
-                <span class="fw-bold text-nasdaq-blue">AccTrading</span>
+                <span class="fw-bold text-nasdaq-blue">AccuTrading</span>
                 <span class="text-light ms-1">Signals</span>
             </a>
             
@@ -303,64 +303,79 @@ require_once 'includes/header.php';
             </div>
         </div>
     </section>
-
     <!-- Pricing Preview -->
-    <section class="py-5 bg-dark">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Choose Your Plan</h2>
-                <p class="lead text-muted">Start with 14-day free trial, no credit card required</p>
-            </div>
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Choose Your Plan</h2>
+            <p class="lead text-muted">Start with 14-day free trial, no credit card required</p>
+        </div>
+        
+        <div class="row g-4">
+            <?php
+            $pdo = getDBConnection();
+            $stmt = $pdo->query("SELECT * FROM subscription_plans ORDER BY monthly_price");
+            $plans = $stmt->fetchAll();
             
-            <div class="row g-4">
-                <?php
-                $pdo = getDBConnection();
-                $stmt = $pdo->query("SELECT * FROM subscription_plans ORDER BY monthly_price");
-                $plans = $stmt->fetchAll();
+            foreach($plans as $plan):
+                // Map database tier names to display names
+                $display_name = match($plan['tier_name']) {
+                    'explorer' => 'Standard',
+                    'professional' => 'Pro',
+                    'institutional' => 'Premium',
+                    default => ucfirst($plan['tier_name'])
+                };
                 
-                foreach($plans as $plan):
-                ?>
-                <div class="col-md-4">
-                    <div class="card h-100 border-<?php echo $plan['tier_name'] == 'professional' ? 'nasdaq-blue border-3' : 'secondary'; ?>">
-                        <?php if($plan['tier_name'] == 'professional'): ?>
-                        <div class="card-header bg-nasdaq-blue text-center py-3">
-                            <span class="badge bg-dark">MOST POPULAR</span>
+                // Determine styling based on tier
+                $is_popular = $plan['tier_name'] == 'professional'; // Pro is most popular
+                $border_class = $is_popular ? 'nasdaq-blue border-3' : 'secondary';
+                $btn_class = match($plan['tier_name']) {
+                    'professional' => 'nasdaq-blue', // Pro gets primary button
+                    'institutional' => 'outline-nasdaq-blue', // Premium gets outline
+                    default => 'outline-light' // Standard gets basic
+                };
+            ?>
+            <div class="col-md-4">
+                <div class="card h-100 border-<?php echo $border_class; ?>">
+                    <?php if($is_popular): ?>
+                    <div class="card-header bg-nasdaq-blue text-center py-3">
+                        <span class="badge bg-dark">MOST POPULAR</span>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4"><?php echo $display_name; ?></h3>
+                        <div class="text-center mb-4">
+                            <span class="display-4 fw-bold">$<?php echo $plan['monthly_price']; ?></span>
+                            <span class="text-muted">/month</span>
+                            <div class="text-muted small">$<?php echo $plan['annual_price']; ?> billed annually</div>
                         </div>
-                        <?php endif; ?>
                         
-                        <div class="card-body">
-                            <h3 class="card-title text-center mb-4"><?php echo ucfirst($plan['tier_name']); ?></h3>
-                            <div class="text-center mb-4">
-                                <span class="display-4 fw-bold">$<?php echo $plan['monthly_price']; ?></span>
-                                <span class="text-muted">/month</span>
-                                <div class="text-muted small">$<?php echo $plan['annual_price']; ?> billed annually</div>
-                            </div>
-                            
-                            <ul class="list-unstyled mb-4">
-                                <?php
-                                $features = json_decode($plan['features'], true);
-                                foreach($features as $feature):
-                                ?>
-                                <li class="mb-2">
-                                    <i class="bi bi-check-circle-fill text-nasdaq-green me-2"></i>
-                                    <?php echo htmlspecialchars($feature); ?>
-                                </li>
-                                <?php endforeach; ?>
-                            </ul>
-                            
-                            <div class="text-center">
-                                <a href="subscription/checkout.php?plan=<?php echo $plan['tier_name']; ?>" 
-                                   class="btn btn-<?php echo $plan['tier_name'] == 'professional' ? 'nasdaq-blue' : 'outline-light'; ?> w-100">
-                                    Start Free Trial
-                                </a>
-                            </div>
+                        <ul class="list-unstyled mb-4">
+                            <?php
+                            $features = json_decode($plan['features'], true);
+                            foreach($features as $feature):
+                            ?>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle-fill text-nasdaq-green me-2"></i>
+                                <?php echo htmlspecialchars($feature); ?>
+                            </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        
+                        <div class="text-center">
+                            <a href="subscription/checkout.php?plan=<?php echo $plan['tier_name']; ?>" 
+                               class="btn btn-<?php echo $btn_class; ?> w-100">
+                                Start Free Trial
+                            </a>
                         </div>
                     </div>
                 </div>
-                <?php endforeach; ?>
             </div>
+            <?php endforeach; ?>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Half-height Footer -->
     <footer class="bg-black py-4" style="height: 40vh; min-height: 200px;">

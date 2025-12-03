@@ -2,11 +2,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <h5 class="text-nasdaq-blue mb-3">EventFlow Institutional</h5>
-                <p class="text-muted small">
-                    AI-powered event intelligence platform for systematic traders and institutions.
-                </p>
-            </div>
+            <h5 class="text-nasdaq-blue mb-3">AccuTrading Signals</h5>
+            <p class="text-muted small">AI-powered derivatives intelligence platform for systematic traders.</p>
+        </div>
             <div class="col-md-2">
                 <h6 class="text-light mb-3">Product</h6>
                 <ul class="list-unstyled">

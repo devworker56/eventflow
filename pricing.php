@@ -11,7 +11,7 @@ $plans = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing - EventFlow Institutional</title>
+    <title>Pricing - AccuTrading Signals</title>
     <meta name="description" content="Simple, transparent pricing for derivatives intelligence. Start with a 14-day free trial.">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -45,17 +45,34 @@ $plans = $stmt->fetchAll();
     <section class="py-5 bg-dark">
         <div class="container">
             <div class="row justify-content-center">
-                <?php foreach($plans as $plan): ?>
+                <?php foreach($plans as $plan): 
+                    // Map database tier names to display names
+                    $display_name = match($plan['tier_name']) {
+                        'explorer' => 'Standard',
+                        'professional' => 'Pro',
+                        'institutional' => 'Premium',
+                        default => ucfirst($plan['tier_name'])
+                    };
+                    
+                    // Determine styling
+                    $is_popular = $plan['tier_name'] == 'professional'; // Pro is most popular
+                    $border_class = $is_popular ? 'nasdaq-blue border-3' : 'secondary';
+                    $btn_class = match($plan['tier_name']) {
+                        'professional' => 'nasdaq-blue',      // Pro gets primary button
+                        'institutional' => 'outline-nasdaq-blue', // Premium gets outline blue
+                        default => 'outline-light'            // Standard gets basic outline
+                    };
+                ?>
                 <div class="col-lg-4 mb-4">
-                    <div class="card h-100 border-<?php echo $plan['tier_name'] == 'professional' ? 'nasdaq-blue border-3' : 'secondary'; ?>">
-                        <?php if($plan['tier_name'] == 'professional'): ?>
+                    <div class="card h-100 border-<?php echo $border_class; ?>">
+                        <?php if($is_popular): ?>
                         <div class="card-header bg-nasdaq-blue text-center py-3">
                             <span class="badge bg-dark">MOST POPULAR</span>
                         </div>
                         <?php endif; ?>
                         
                         <div class="card-body p-4">
-                            <h3 class="card-title text-center mb-3"><?php echo ucfirst($plan['tier_name']); ?></h3>
+                            <h3 class="card-title text-center mb-3"><?php echo $display_name; ?></h3>
                             
                             <div class="text-center mb-4">
                                 <div class="monthly-price">
@@ -83,7 +100,7 @@ $plans = $stmt->fetchAll();
                             
                             <div class="text-center mt-auto">
                                 <a href="subscription/checkout.php?plan=<?php echo $plan['tier_name']; ?>" 
-                                   class="btn btn-<?php echo $plan['tier_name'] == 'professional' ? 'nasdaq-blue' : 'outline-light'; ?> w-100 py-3">
+                                   class="btn btn-<?php echo $btn_class; ?> w-100 py-3">
                                     Start Free Trial
                                 </a>
                                 <p class="text-muted small mt-2 mb-0">14-day free trial • No credit card required</p>
@@ -112,7 +129,7 @@ $plans = $stmt->fetchAll();
                             </h2>
                             <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <p>You get full access to the Explorer tier features for 14 days. No credit card is required to start the trial. At the end of the trial, you can choose to upgrade to a paid plan or your account will be paused.</p>
+                                    <p>You get full access to the <strong>Standard tier</strong> features for 14 days. No credit card is required to start the trial. At the end of the trial, you can choose to upgrade to a paid plan or your account will be paused.</p>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +155,7 @@ $plans = $stmt->fetchAll();
                             </h2>
                             <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <p>We accept all major credit cards (Visa, Mastercard, American Express) through our secure Stripe payment processor. We also support ACH transfers for institutional customers.</p>
+                                    <p>We accept all major credit cards (Visa, Mastercard, American Express) through our secure Stripe payment processor. We also support ACH transfers for <strong>Premium</strong> customers.</p>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +181,7 @@ $plans = $stmt->fetchAll();
                             </h2>
                             <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <p>Yes, each tier has a monthly API call limit: Explorer (1,000), Professional (10,000), and Institutional (100,000). Additional API calls can be purchased if needed.</p>
+                                    <p>Yes, each tier has a monthly API call limit: <strong>Standard (1,000)</strong>, <strong>Pro (10,000)</strong>, and <strong>Premium (100,000)</strong>. Additional API calls can be purchased if needed.</p>
                                 </div>
                             </div>
                         </div>
