@@ -13,10 +13,12 @@ RewriteRule ^(config|includes|modules) - [F,L]
 RewriteCond %{REQUEST_URI} ^/admin/(config|database|private)
 RewriteRule ^ - [F,L]
 
-# Remove .php extension from URLs
+# Remove .php extension from URLs (FIXED VERSION)
+# Only remove .php if NOT already ending with .php
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.*)$ $1.php [L]
+RewriteRule ^(.+)$ $1.php [L]
 
 # Protect .env file
 <Files ".env">
