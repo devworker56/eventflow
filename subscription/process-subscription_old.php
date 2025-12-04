@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get and validate JSON input
 $input = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($input['payment_method_id'], $input['plan'], $input['billing'], $input['price_id'])) {
+if (!isset($input['payment_method_id'], $input['plan'], $input['billing'])) {
     http_response_code(400);
     echo json_encode(['error' => 'Missing required fields']);
     exit();
@@ -25,8 +25,6 @@ if (!isset($input['payment_method_id'], $input['plan'], $input['billing'], $inpu
 $paymentMethodId = $input['payment_method_id'];
 $plan = $input['plan'];
 $billing = $input['billing'];
-$priceId = $input['price_id'];
-$noTrial = $input['no_trial'] ?? true; // Always no trial now
 $userId = $_SESSION['user_id'] ?? null;
 
 if (!$userId) {
@@ -56,6 +54,14 @@ try {
         throw new Exception('Invalid plan selected');
     }
     
+    // Get the correct Stripe price ID
+    $priceColumn = $billing == 'annual' ? 'stripe_annual_price_id' : 'stripe_monthly_price_id';
+    $priceId = $planDetails[$priceColumn];
+    
+    if (empty($priceId)) {
+        throw new Exception('Price ID not configured for this plan');
+    }
+    
     // Check if user already has a Stripe customer ID
     $stripeCustomerId = $user['stripe_customer_id'];
     
@@ -63,14 +69,10 @@ try {
         // Create new Stripe customer
         $customer = \Stripe\Customer::create([
             'email' => $user['email'],
-            'name' => trim($user['first_name'] . ' ' . $user['last_name']),
+            'name' => $user['first_name'] . ' ' . $user['last_name'],
             'payment_method' => $paymentMethodId,
             'invoice_settings' => [
                 'default_payment_method' => $paymentMethodId
-            ],
-            'metadata' => [
-                'user_id' => $userId,
-                'signup_date' => date('Y-m-d')
             ]
         ]);
         $stripeCustomerId = $customer->id;
@@ -80,23 +82,19 @@ try {
         $stmt->execute([$stripeCustomerId, $userId]);
     } else {
         // Attach payment method to existing customer
-        try {
-            $paymentMethod = \Stripe\PaymentMethod::retrieve($paymentMethodId);
-            $paymentMethod->attach(['customer' => $stripeCustomerId]);
-            
-            // Set as default payment method
-            \Stripe\Customer::update($stripeCustomerId, [
-                'invoice_settings' => [
-                    'default_payment_method' => $paymentMethodId
-                ]
-            ]);
-        } catch (\Stripe\Exception\InvalidRequestException $e) {
-            // Payment method might already be attached, continue
-        }
+        $paymentMethod = \Stripe\PaymentMethod::retrieve($paymentMethodId);
+        $paymentMethod->attach(['customer' => $stripeCustomerId]);
+        
+        // Set as default payment method
+        \Stripe\Customer::update($stripeCustomerId, [
+            'invoice_settings' => [
+                'default_payment_method' => $paymentMethodId
+            ]
+        ]);
     }
     
-    // Create subscription WITHOUT trial
-    $subscriptionData = [
+    // Create subscription
+    $subscription = \Stripe\Subscription::create([
         'customer' => $stripeCustomerId,
         'items' => [[
             'price' => $priceId,
@@ -104,44 +102,42 @@ try {
         'payment_behavior' => 'default_incomplete',
         'payment_settings' => ['save_default_payment_method' => 'on_subscription'],
         'expand' => ['latest_invoice.payment_intent'],
+        'trial_period_days' => TRIAL_PERIOD_DAYS,
         'metadata' => [
             'user_id' => $userId,
             'plan' => $plan,
             'billing' => $billing
         ]
-    ];
-    
-    // NO TRIAL - immediate charge
-    $subscription = \Stripe\Subscription::create($subscriptionData);
+    ]);
     
     // Update user subscription info in database
+    $trialEndsAt = date('Y-m-d H:i:s', $subscription->trial_end);
     $currentPeriodEnd = date('Y-m-d H:i:s', $subscription->current_period_end);
-    $subscriptionStatus = $subscription->status;
     
     $stmt = $pdo->prepare("
         UPDATE users 
         SET 
             subscription_tier = ?,
-            subscription_status = ?,
+            subscription_status = 'trialing',
             stripe_subscription_id = ?,
+            trial_ends_at = ?,
             current_period_end = ?,
             updated_at = NOW()
         WHERE id = ?
     ");
     $stmt->execute([
         $plan,
-        $subscriptionStatus,
         $subscription->id,
+        $trialEndsAt,
         $currentPeriodEnd,
         $userId
     ]);
     
-    // Record payment
+    // Record payment attempt
     $stmt = $pdo->prepare("
         INSERT INTO payments (
             user_id, 
             stripe_payment_intent_id, 
-            stripe_subscription_id,
             amount,
             currency,
             status,
@@ -149,47 +145,28 @@ try {
             billing_period,
             period_start,
             period_end,
-            metadata,
-            created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+            metadata
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
-    
-    $paymentStatus = 'pending';
-    $invoice = $subscription->latest_invoice;
-    
-    if ($invoice->paid) {
-        $paymentStatus = 'succeeded';
-    } elseif ($invoice->payment_intent && $invoice->payment_intent->status === 'requires_action') {
-        $paymentStatus = 'requires_action';
-    } elseif ($invoice->payment_intent && $invoice->payment_intent->status === 'succeeded') {
-        $paymentStatus = 'succeeded';
-    }
-    
     $stmt->execute([
         $userId,
-        $invoice->payment_intent ? $invoice->payment_intent->id : null,
-        $subscription->id,
-        $planDetails[$billing == 'annual' ? 'annual_price' : 'monthly_price'],
+        $subscription->latest_invoice->payment_intent->id,
+        $planDetails['monthly_price'],
         'USD',
-        $paymentStatus,
+        'pending',
         $plan,
         $billing,
         date('Y-m-d H:i:s'),
         $currentPeriodEnd,
-        json_encode([
-            'subscription_id' => $subscription->id,
-            'invoice_id' => $invoice->id,
-            'plan_name' => $plan
-        ])
+        json_encode(['subscription_id' => $subscription->id])
     ]);
     
     // Return the client secret for 3D Secure if needed
     $response = [
         'subscription_id' => $subscription->id,
-        'client_secret' => $invoice->payment_intent ? $invoice->payment_intent->client_secret : null,
-        'requires_action' => $invoice->payment_intent && $invoice->payment_intent->status === 'requires_action',
-        'subscription_status' => $subscription->status,
-        'payment_status' => $paymentStatus
+        'client_secret' => $subscription->latest_invoice->payment_intent->client_secret,
+        'requires_action' => $subscription->latest_invoice->payment_intent->status === 'requires_action',
+        'subscription_status' => $subscription->status
     ];
     
     // Update session with new tier
@@ -203,8 +180,7 @@ try {
     http_response_code(402);
     echo json_encode([
         'error' => 'Payment failed: ' . ($error->message ?? 'Card declined'),
-        'code' => $error->code ?? 'card_declined',
-        'decline_code' => $error->decline_code ?? null
+        'code' => $error->code ?? 'card_declined'
     ]);
 } catch (\Stripe\Exception\RateLimitException $e) {
     // Too many requests

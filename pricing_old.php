@@ -12,7 +12,7 @@ $plans = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing - AccuTrading Signals</title>
-    <meta name="description" content="Professional pricing for derivatives intelligence. Subscribe instantly.">
+    <meta name="description" content="Simple, transparent pricing for derivatives intelligence. Start with a 14-day free trial.">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -27,10 +27,10 @@ $plans = $stmt->fetchAll();
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center">
                     <h1 class="display-4 fw-bold mb-4">
-                        Professional <span class="text-nasdaq-blue">Pricing</span>
+                        Simple, Transparent <span class="text-nasdaq-blue">Pricing</span>
                     </h1>
                     <p class="lead mb-4">
-                        Subscribe instantly. No free trials. Cancel anytime.
+                        Start with a 14-day free trial. No credit card required. Cancel anytime.
                     </p>
                     <div class="d-inline-flex align-items-center bg-dark rounded-pill p-1 mb-4">
                         <button id="monthlyBtn" class="btn btn-nasdaq-blue rounded-pill px-4">Monthly</button>
@@ -48,18 +48,18 @@ $plans = $stmt->fetchAll();
                 <?php foreach($plans as $plan): 
                     // Map database tier names to display names
                     $display_name = match($plan['tier_name']) {
-                        'standard' => 'Standard',
-                        'pro' => 'Pro',
-                        'premium' => 'Premium',
+                        'explorer' => 'Standard',
+                        'professional' => 'Pro',
+                        'institutional' => 'Premium',
                         default => ucfirst($plan['tier_name'])
                     };
                     
                     // Determine styling
-                    $is_popular = $plan['tier_name'] == 'pro'; // Pro is most popular
+                    $is_popular = $plan['tier_name'] == 'professional'; // Pro is most popular
                     $border_class = $is_popular ? 'nasdaq-blue border-3' : 'secondary';
                     $btn_class = match($plan['tier_name']) {
-                        'pro' => 'nasdaq-blue',      // Pro gets primary button
-                        'premium' => 'outline-nasdaq-blue', // Premium gets outline blue
+                        'professional' => 'nasdaq-blue',      // Pro gets primary button
+                        'institutional' => 'outline-nasdaq-blue', // Premium gets outline blue
                         default => 'outline-light'            // Standard gets basic outline
                     };
                 ?>
@@ -99,21 +99,11 @@ $plans = $stmt->fetchAll();
                             </ul>
                             
                             <div class="text-center mt-auto">
-                                <?php if(isset($_SESSION['user_id'])): ?>
-                                    <!-- Logged in - direct to checkout -->
-                                    <a href="subscription/checkout.php?plan=<?php echo $plan['tier_name']; ?>&billing=monthly" 
-                                       class="btn btn-<?php echo $btn_class; ?> w-100 py-3 subscribe-btn"
-                                       data-plan="<?php echo $plan['tier_name']; ?>">
-                                        <i class="bi bi-credit-card me-2"></i>Subscribe Now
-                                    </a>
-                                <?php else: ?>
-                                    <!-- Not logged in - register first -->
-                                    <a href="register.php?plan=<?php echo $plan['tier_name']; ?>" 
-                                       class="btn btn-<?php echo $btn_class; ?> w-100 py-3">
-                                        <i class="bi bi-person-plus me-2"></i>Register & Subscribe
-                                    </a>
-                                <?php endif; ?>
-                                <p class="text-muted small mt-2 mb-0">Instant access • Cancel anytime</p>
+                                <a href="subscription/checkout.php?plan=<?php echo $plan['tier_name']; ?>" 
+                                   class="btn btn-<?php echo $btn_class; ?> w-100 py-3">
+                                    Start Free Trial
+                                </a>
+                                <p class="text-muted small mt-2 mb-0">14-day free trial • No credit card required</p>
                             </div>
                         </div>
                     </div>
@@ -123,7 +113,7 @@ $plans = $stmt->fetchAll();
         </div>
     </section>
 
-    <!-- FAQ Section - Updated -->
+    <!-- FAQ Section -->
     <section class="py-5 bg-black">
         <div class="container">
             <h2 class="text-center display-5 fw-bold mb-5">Frequently Asked Questions</h2>
@@ -134,12 +124,12 @@ $plans = $stmt->fetchAll();
                         <div class="accordion-item bg-dark border-nasdaq-blue">
                             <h2 class="accordion-header">
                                 <button class="accordion-button bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                    Is there a free trial?
+                                    How does the free trial work?
                                 </button>
                             </h2>
                             <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <p>No, we no longer offer free trials. You can subscribe instantly and get immediate access to all features. We offer a <strong>30-day money-back guarantee</strong> if you're not satisfied.</p>
+                                    <p>You get full access to the <strong>Standard tier</strong> features for 14 days. No credit card is required to start the trial. At the end of the trial, you can choose to upgrade to a paid plan or your account will be paused.</p>
                                 </div>
                             </div>
                         </div>
@@ -152,7 +142,7 @@ $plans = $stmt->fetchAll();
                             </h2>
                             <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <p>Yes, you can cancel your subscription at any time. If you cancel, you'll continue to have access until the end of your current billing period. No long-term contracts.</p>
+                                    <p>Yes, you can cancel your subscription at any time. If you cancel, you'll continue to have access until the end of your current billing period.</p>
                                 </div>
                             </div>
                         </div>
@@ -186,12 +176,12 @@ $plans = $stmt->fetchAll();
                         <div class="accordion-item bg-dark border-nasdaq-blue mt-2">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
-                                    When will I be charged?
+                                    Is there a limit on API calls?
                                 </button>
                             </h2>
                             <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <p>You'll be charged immediately upon subscription. For monthly plans, you'll be charged every 30 days. For annual plans, you'll be charged once per year.</p>
+                                    <p>Yes, each tier has a monthly API call limit: <strong>Standard (1,000)</strong>, <strong>Pro (10,000)</strong>, and <strong>Premium (100,000)</strong>. Additional API calls can be purchased if needed.</p>
                                 </div>
                             </div>
                         </div>
@@ -223,45 +213,27 @@ $plans = $stmt->fetchAll();
     
     <script>
     // Toggle monthly/annual pricing
-    const monthlyBtn = document.getElementById('monthlyBtn');
-    const annualBtn = document.getElementById('annualBtn');
-
-    monthlyBtn.addEventListener('click', function() {
+    document.getElementById('monthlyBtn').addEventListener('click', function() {
         this.classList.add('btn-nasdaq-blue');
         this.classList.remove('btn-outline-light');
-        annualBtn.classList.remove('btn-nasdaq-blue');
-        annualBtn.classList.add('btn-outline-light');
+        document.getElementById('annualBtn').classList.remove('btn-nasdaq-blue');
+        document.getElementById('annualBtn').classList.add('btn-outline-light');
         
         // Show monthly prices
         document.querySelectorAll('.monthly-price').forEach(el => el.classList.remove('d-none'));
         document.querySelectorAll('.annual-price').forEach(el => el.classList.add('d-none'));
-        
-        // Update all subscribe button URLs to monthly billing
-        document.querySelectorAll('.subscribe-btn').forEach(btn => {
-            const plan = btn.getAttribute('data-plan');
-            btn.href = `subscription/checkout.php?plan=${plan}&billing=monthly`;
-        });
     });
-
-    annualBtn.addEventListener('click', function() {
+    
+    document.getElementById('annualBtn').addEventListener('click', function() {
         this.classList.add('btn-nasdaq-blue');
         this.classList.remove('btn-outline-light');
-        monthlyBtn.classList.remove('btn-nasdaq-blue');
-        monthlyBtn.classList.add('btn-outline-light');
+        document.getElementById('monthlyBtn').classList.remove('btn-nasdaq-blue');
+        document.getElementById('monthlyBtn').classList.add('btn-outline-light');
         
         // Show annual prices
         document.querySelectorAll('.monthly-price').forEach(el => el.classList.add('d-none'));
         document.querySelectorAll('.annual-price').forEach(el => el.classList.remove('d-none'));
-        
-        // Update all subscribe button URLs to annual billing
-        document.querySelectorAll('.subscribe-btn').forEach(btn => {
-            const plan = btn.getAttribute('data-plan');
-            btn.href = `subscription/checkout.php?plan=${plan}&billing=annual`;
-        });
     });
-
-    // Set default billing to monthly
-    monthlyBtn.click();
     </script>
 </body>
 </html>

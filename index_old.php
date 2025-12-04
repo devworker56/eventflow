@@ -300,13 +300,12 @@ require_once 'includes/header.php';
             </div>
         </div>
     </section>
-<!----------------------------- Pricing Preview ------------------------------------------->
-<!-- Pricing Preview -->
+    <!-- Pricing Preview -->
 <section class="py-5 bg-dark">
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold mb-3">Choose Your Plan</h2>
-            <p class="lead text-muted">Subscribe instantly. No free trials. Cancel anytime.</p>
+            <p class="lead text-muted">Start with 14-day free trial, no credit card required</p>
         </div>
         
         <div class="row g-4">
@@ -316,19 +315,21 @@ require_once 'includes/header.php';
             $plans = $stmt->fetchAll();
             
             foreach($plans as $plan):
+                // Map database tier names to display names
                 $display_name = match($plan['tier_name']) {
-                    'standard' => 'Standard',
-                    'pro' => 'Pro',
-                    'premium' => 'Premium',
+                    'explorer' => 'Standard',
+                    'professional' => 'Pro',
+                    'institutional' => 'Premium',
                     default => ucfirst($plan['tier_name'])
                 };
                 
-                $is_popular = $plan['tier_name'] == 'pro';
+                // Determine styling based on tier
+                $is_popular = $plan['tier_name'] == 'professional'; // Pro is most popular
                 $border_class = $is_popular ? 'nasdaq-blue border-3' : 'secondary';
                 $btn_class = match($plan['tier_name']) {
-                    'pro' => 'nasdaq-blue',
-                    'premium' => 'outline-nasdaq-blue',
-                    default => 'outline-light'
+                    'professional' => 'nasdaq-blue', // Pro gets primary button
+                    'institutional' => 'outline-nasdaq-blue', // Premium gets outline
+                    default => 'outline-light' // Standard gets basic
                 };
             ?>
             <div class="col-md-4">
@@ -360,18 +361,10 @@ require_once 'includes/header.php';
                         </ul>
                         
                         <div class="text-center">
-                            <?php if(isset($_SESSION['user_id'])): ?>
-                                <a href="subscription/checkout.php?plan=<?php echo $plan['tier_name']; ?>&billing=monthly" 
-                                   class="btn btn-<?php echo $btn_class; ?> w-100 subscribe-btn"
-                                   data-plan="<?php echo $plan['tier_name']; ?>">
-                                    <i class="bi bi-credit-card me-2"></i>Subscribe Now
-                                </a>
-                            <?php else: ?>
-                                <a href="register.php?plan=<?php echo $plan['tier_name']; ?>" 
-                                   class="btn btn-<?php echo $btn_class; ?> w-100">
-                                    <i class="bi bi-person-plus me-2"></i>Register & Subscribe
-                                </a>
-                            <?php endif; ?>
+                            <a href="subscription/checkout.php?plan=<?php echo $plan['tier_name']; ?>" 
+                               class="btn btn-<?php echo $btn_class; ?> w-100">
+                                Start Free Trial
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -380,7 +373,7 @@ require_once 'includes/header.php';
         </div>
     </div>
 </section>
-<!----------------------------- Pricing Preview ------------------------------------------->
+
     <!-- Half-height Footer -->
     <footer class="bg-black py-4" style="height: 40vh; min-height: 200px;">
         <div class="container h-100">

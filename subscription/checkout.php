@@ -6,11 +6,11 @@ require_once '../includes/auth-functions.php';
 
 requireLogin();
 
-$plan = $_GET['plan'] ?? 'professional';
+$plan = $_GET['plan'] ?? 'pro';
 $billing = $_GET['billing'] ?? 'monthly'; // monthly or annual
 
 // Validate plan
-$validPlans = ['explorer', 'professional', 'institutional'];
+$validPlans = ['standard', 'pro', 'premium'];
 if(!in_array($plan, $validPlans)) {
     header('Location: ../pricing.php');
     exit();
@@ -27,16 +27,33 @@ $stmt = $pdo->prepare("SELECT * FROM subscription_plans WHERE tier_name = ?");
 $stmt->execute([$plan]);
 $planDetails = $stmt->fetch();
 
+if(!$planDetails) {
+    die("Plan not found. Please contact support.");
+}
+
 // Calculate price
 $price = $billing == 'annual' ? $planDetails['annual_price'] : $planDetails['monthly_price'];
-$priceId = $billing == 'annual' ? "price_{$plan}_annual" : "price_{$plan}_monthly";
+$priceIdColumn = $billing == 'annual' ? 'stripe_annual_price_id' : 'stripe_monthly_price_id';
+$priceId = $planDetails[$priceIdColumn];
+
+if(empty($priceId)) {
+    die("Price not configured for this plan. Please contact support.");
+}
+
+// Map tier name to display name
+$display_plan = match($plan) {
+    'standard' => 'Standard',
+    'pro' => 'Pro',
+    'premium' => 'Premium',
+    default => ucfirst($plan)
+};
 ?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - EventFlow</title>
+    <title>Checkout - AccuTrading Signals</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/custom.css">
     <script src="https://js.stripe.com/v3/"></script>
@@ -49,11 +66,11 @@ $priceId = $billing == 'annual' ? "price_{$plan}_annual" : "price_{$plan}_monthl
             <div class="col-md-8">
                 <div class="card bg-dark border-nasdaq-blue">
                     <div class="card-body p-5">
-                        <h2 class="text-center mb-4">Upgrade to <?php echo ucfirst($plan); ?></h2>
+                        <h2 class="text-center mb-4">Subscribe to <?php echo $display_plan; ?></h2>
                         
                         <div class="text-center mb-5">
                             <h3 class="display-4 fw-bold text-nasdaq-blue">$<?php echo number_format($price, 2); ?></h3>
-                            <p class="text-muted">per <?php echo $billing == 'annual' ? 'year' : 'month'; ?></p>
+                            <p class="text-muted"><?php echo $billing == 'annual' ? 'per year' : 'per month'; ?></p>
                             <a href="?plan=<?php echo $plan; ?>&billing=<?php echo $billing == 'monthly' ? 'annual' : 'monthly'; ?>" 
                                class="btn btn-outline-light btn-sm">
                                 Switch to <?php echo $billing == 'monthly' ? 'annual' : 'monthly'; ?> billing
@@ -80,7 +97,8 @@ $priceId = $billing == 'annual' ? "price_{$plan}_annual" : "price_{$plan}_monthl
                                 <form id="payment-form">
                                     <div class="mb-3">
                                         <label for="card-holder-name" class="form-label">Cardholder Name</label>
-                                        <input type="text" class="form-control" id="card-holder-name" required>
+                                        <input type="text" class="form-control" id="card-holder-name" 
+                                               value="<?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?>" required>
                                     </div>
                                     
                                     <div class="mb-3">
@@ -96,9 +114,17 @@ $priceId = $billing == 'annual' ? "price_{$plan}_annual" : "price_{$plan}_monthl
                                         </label>
                                     </div>
                                     
+                                    <div class="alert alert-info bg-black border-nasdaq-blue">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        You'll be charged <strong>$<?php echo number_format($price, 2); ?></strong> immediately.
+                                        <?php echo $billing == 'annual' ? 'Renews annually.' : 'Renews monthly.'; ?>
+                                    </div>
+                                    
                                     <div class="d-grid">
                                         <button id="submit-button" class="btn btn-nasdaq-blue btn-lg">
-                                            <span id="button-text">Subscribe Now</span>
+                                            <span id="button-text">
+                                                <i class="bi bi-credit-card me-2"></i>Pay $<?php echo number_format($price, 2); ?> Now
+                                            </span>
                                             <span id="button-spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                                         </button>
                                     </div>
@@ -107,8 +133,8 @@ $priceId = $billing == 'annual' ? "price_{$plan}_annual" : "price_{$plan}_monthl
                         </div>
                         
                         <div class="text-center text-muted small">
-                            <p>You'll be charged $<?php echo number_format($price, 2); ?> <?php echo $billing == 'annual' ? 'yearly' : 'monthly'; ?>. Cancel anytime.</p>
                             <p>By subscribing, you agree to our <a href="../terms.php" class="text-nasdaq-blue">Terms of Service</a> and <a href="../privacy.php" class="text-nasdaq-blue">Privacy Policy</a>.</p>
+                            <p>30-day money-back guarantee. Cancel anytime.</p>
                         </div>
                     </div>
                 </div>
@@ -138,7 +164,8 @@ $priceId = $billing == 'annual' ? "price_{$plan}_annual" : "price_{$plan}_monthl
             type: 'card',
             card: cardElement,
             billing_details: {
-                name: document.getElementById('card-holder-name').value
+                name: document.getElementById('card-holder-name').value,
+                email: '<?php echo $user["email"]; ?>'
             }
         });
         
@@ -158,7 +185,8 @@ $priceId = $billing == 'annual' ? "price_{$plan}_annual" : "price_{$plan}_monthl
                     payment_method_id: paymentMethod.id,
                     plan: '<?php echo $plan; ?>',
                     billing: '<?php echo $billing; ?>',
-                    price_id: '<?php echo $priceId; ?>'
+                    price_id: '<?php echo $priceId; ?>',
+                    no_trial: true
                 })
             })
             .then(response => response.json())
@@ -178,12 +206,18 @@ $priceId = $billing == 'annual' ? "price_{$plan}_annual" : "price_{$plan}_monthl
                                 buttonText.classList.remove('d-none');
                                 buttonSpinner.classList.add('d-none');
                             } else {
-                                window.location.href = 'success.php';
+                                window.location.href = 'success.php?subscription_id=' + data.subscription_id;
                             }
                         });
                 } else {
-                    window.location.href = 'success.php';
+                    window.location.href = 'success.php?subscription_id=' + data.subscription_id;
                 }
+            })
+            .catch(error => {
+                document.getElementById('card-errors').textContent = 'Network error. Please try again.';
+                submitButton.disabled = false;
+                buttonText.classList.remove('d-none');
+                buttonSpinner.classList.add('d-none');
             });
         }
     });
