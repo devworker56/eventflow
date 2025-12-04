@@ -51,14 +51,23 @@ require_once 'includes/header.php';
             background-color: var(--nasdaq-blue);
             color: white;
         }
+        
+        .centered-hero {
+            text-align: center;
+        }
+        .centered-hero .lead {
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
-    <!-- Fixed Navigation Bar -->
+    <!-- Fixed Navigation Bar - Simplified version -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top border-bottom border-nasdaq-blue">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
-                <img src="assets/images/logo.png" alt="EventFlow" height="40" class="me-2">
+                <img src="assets/images/logo.png" alt="AccuTrading Signals" height="40" class="me-2">
                 <span class="fw-bold text-nasdaq-blue">AccuTrading</span>
                 <span class="text-light ms-1">Signals</span>
             </a>
@@ -71,9 +80,6 @@ require_once 'includes/header.php';
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#cross-asset-analysis">Features</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="pricing.php">Pricing</a>
@@ -111,53 +117,24 @@ require_once 'includes/header.php';
         </div>
     </nav>
 
-    <!-- Half-height Hero Banner -->
-    <section class="hero-banner position-relative" style="height: 50vh; min-height: 400px;">
+    <!-- Centered Hero Banner -->
+    <section class="hero-banner position-relative centered-hero" style="height: 50vh; min-height: 400px;">
         <div class="container h-100">
-            <div class="row h-100 align-items-center">
-                <div class="col-lg-8">
+            <div class="row h-100 align-items-center justify-content-center">
+                <div class="col-lg-10 col-xl-8">
                     <h1 class="display-4 fw-bold mb-4">
-                        Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span> for Superior Equity Predictions
+                        Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span>
                     </h1>
                     <p class="lead mb-4">
                         AccuTradingSignals is an intelligence engine that decodes market events to provide a predictive trading edge. We combine rigorous quantitative finance—analyzing metrics like options volatility surfaces and futures term structures—with advanced machine learning models that interpret news sentiment and social narratives. This allows us to identify triggers, model cross-asset reactions, and forecast their ripple effects into equity markets.
                     </p>
-                    <div class="d-flex flex-wrap gap-3">
+                    <div class="d-flex flex-wrap gap-3 justify-content-center">
                         <a href="register.php" class="btn btn-nasdaq-blue btn-lg px-4">
                             <i class="bi bi-lightning-charge-fill me-2"></i>Get Started
                         </a>
                         <a href="#cross-asset-analysis" class="btn btn-outline-light btn-lg px-4">
                             <i class="bi bi-play-circle me-2"></i>See How It Works
                         </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 d-none d-lg-block">
-                    <div class="card bg-dark border-nasdaq-blue">
-                        <div class="card-body">
-                            <h5 class="card-title text-nasdaq-blue">Live Equity Signal</h5>
-                            <div class="signal-preview">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="symbol-icon bg-nasdaq-blue rounded-circle p-2 me-3">
-                                        <i class="bi bi-graph-up text-white"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="mb-0">AAPL</h6>
-                                        <small class="text-muted">Earnings in 2 days</small>
-                                    </div>
-                                    <div class="ms-auto">
-                                        <span class="badge bg-success">+82% Confidence</span>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <small class="text-muted">Derivatives Signal:</small>
-                                    <p class="mb-1">Options IV suggests 8.2% move priced in</p>
-                                    <small class="text-muted">Our AI predicts: <strong class="text-success">+5.3%</strong></p>
-                                </div>
-                                <button class="btn btn-sm btn-outline-nasdaq-blue w-100">
-                                    View Full Analysis
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -267,7 +244,7 @@ require_once 'includes/header.php';
         </div>
     </section>
 
-    <!-- Platform Features (from features.php) -->
+    <!-- Platform Features -->
     <section class="py-5 bg-black">
         <div class="container">
             <div class="text-center mb-5">

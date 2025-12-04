@@ -19,9 +19,6 @@
                     <a class="nav-link" href="https://accutradingsignals.com/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="features.php">Features</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="pricing.php">Pricing</a>
                 </li>
                 
