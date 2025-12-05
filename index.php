@@ -59,7 +59,7 @@ require_once 'includes/header.php';
         .transparent-hero {
             position: relative;
             background: transparent !important;
-            min-height: 100vh;
+            min-height: 80vh; /* Reduced to bring content higher */
             overflow: hidden;
         }
         
@@ -70,16 +70,6 @@ require_once 'includes/header.php';
             width: 100%;
             height: 100%;
             z-index: 0;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            margin-top: 2rem;
         }
         
         .stock-chart-container {
@@ -195,7 +185,7 @@ require_once 'includes/header.php';
     </nav>
 
     <!-- Transparent Hero Banner with Dynamic Effects -->
-    <section class="transparent-hero" style="padding-top: 100px;">
+    <section class="transparent-hero" style="padding-top: 60px;"> <!-- Reduced padding -->
         <!-- Stock Chart Background -->
         <div class="stock-chart-container">
             <canvas id="stockChart" class="chart-canvas"></canvas>
@@ -204,25 +194,18 @@ require_once 'includes/header.php';
         <!-- Neural Network / Particle Effect -->
         <div id="neuralNetwork"></div>
         
-        <!-- Content Overlay -->
+        <!-- Content Overlay - No visible box -->
         <div class="container h-100">
-            <div class="row align-items-center justify-content-center h-100">
-                <div class="col-lg-8">
-                    <div class="hero-content text-center">
+            <div class="row align-items-start justify-content-center h-100"> <!-- align-items-start instead of align-items-center -->
+                <div class="col-lg-10 col-xl-8 mt-5"> <!-- Added mt-5 to move closer to top -->
+                    <div class="text-center">
                         <h1 class="display-4 fw-bold mb-4">
                             Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span>
                         </h1>
-                        <p class="lead mb-4">
+                        <p class="lead mb-4 text-light">
                             AccuTradingSignals is an intelligence engine that decodes market events to provide a predictive trading edge. We combine rigorous quantitative finance—analyzing metrics like options volatility surfaces and futures term structures—with advanced machine learning models that interpret news sentiment and social narratives. This allows us to identify triggers, model cross-asset reactions, and forecast their ripple effects into equity markets.
                         </p>
-                        <div class="d-flex flex-wrap gap-3 justify-content-center">
-                            <a href="register.php" class="btn btn-nasdaq-blue btn-lg px-4">
-                                <i class="bi bi-lightning-charge-fill me-2"></i>Get Started
-                            </a>
-                            <a href="#cross-asset-analysis" class="btn btn-outline-light btn-lg px-4">
-                                <i class="bi bi-play-circle me-2"></i>See How It Works
-                            </a>
-                        </div>
+                        <!-- Removed buttons -->
                     </div>
                     
                     <!-- Live Data Ticker -->
