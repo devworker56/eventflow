@@ -450,7 +450,7 @@ require_once 'includes/header.php';
     
     <!-- Advanced Visual Effects -->
     <script>
-        // Stock Chart Generator - Updated to remove grid lines
+        // Stock Chart Generator - Improved with better randomness and smoother transitions
         class StockChart {
             constructor(canvasId) {
                 this.canvas = document.getElementById(canvasId);
@@ -474,30 +474,43 @@ require_once 'includes/header.php';
             resize() {
                 this.canvas.width = this.canvas.parentElement.clientWidth;
                 this.canvas.height = this.canvas.parentElement.clientHeight;
+                this.generateData(); // Regenerate data on resize
             }
             
             generateData() {
                 this.points = [];
                 const width = this.canvas.width;
                 const height = this.canvas.height;
-                const pointCount = 100;
+                const pointCount = 150; // Increased for smoother curve
                 
                 let y = height / 2;
                 let trend = 0;
+                let momentum = 0;
                 
                 for (let i = 0; i < pointCount; i++) {
-                    trend += (Math.random() - 0.5) * 0.1;
-                    trend = Math.max(-0.5, Math.min(0.5, trend));
+                    // More realistic stock movement simulation
+                    momentum += (Math.random() - 0.5) * 0.15;
+                    momentum = Math.max(-1, Math.min(1, momentum));
                     
-                    y += trend * 5;
-                    y += (Math.random() - 0.5) * 20;
-                    y = Math.max(height * 0.2, Math.min(height * 0.8, y));
+                    trend += momentum * 0.05;
+                    trend += (Math.random() - 0.5) * 0.08;
+                    trend = Math.max(-0.6, Math.min(0.6, trend));
+                    
+                    y += trend * 8;
+                    y += (Math.random() - 0.5) * 25; // Increased randomness
+                    y = Math.max(height * 0.15, Math.min(height * 0.85, y));
+                    
+                    // Add occasional larger spikes
+                    if (Math.random() < 0.05) {
+                        y += (Math.random() - 0.5) * 40;
+                    }
                     
                     this.points.push({
                         x: (i / (pointCount - 1)) * width,
                         y: y,
                         color: y > height / 2 ? '#FF4D4D' : '#00D18C',
-                        volatility: Math.random() * 10
+                        volatility: 5 + Math.random() * 15, // Increased volatility range
+                        momentum: momentum
                     });
                 }
             }
@@ -508,13 +521,24 @@ require_once 'includes/header.php';
                 const height = this.canvas.height;
                 
                 // Clear with slight fade effect
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.03)'; // Slightly lighter fade
                 ctx.fillRect(0, 0, width, height);
-                
-                // REMOVED GRID LINES - No horizontal or vertical grid lines
                 
                 // Draw stock line
                 if (this.points.length > 1) {
+                    // Create gradient for the line
+                    const gradient = ctx.createLinearGradient(0, 0, width, 0);
+                    gradient.addColorStop(0, 'rgba(0, 145, 218, 0.9)');
+                    gradient.addColorStop(0.3, 'rgba(0, 209, 140, 0.9)');
+                    gradient.addColorStop(0.7, 'rgba(255, 77, 77, 0.9)');
+                    gradient.addColorStop(1, 'rgba(0, 178, 255, 0.9)');
+                    
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 2.5; // Slightly thicker line
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    
+                    // Draw main line with smooth curve
                     ctx.beginPath();
                     ctx.moveTo(this.points[0].x, this.points[0].y);
                     
@@ -522,60 +546,102 @@ require_once 'includes/header.php';
                         const p1 = this.points[i - 1];
                         const p2 = this.points[i];
                         
-                        // Create smooth curve
-                        const cp1x = p1.x + (p2.x - p1.x) / 3;
-                        const cp1y = p1.y;
-                        const cp2x = p1.x + 2 * (p2.x - p1.x) / 3;
-                        const cp2y = p2.y;
+                        // Calculate control points for smoother curves
+                        const dx = p2.x - p1.x;
+                        const dy = p2.y - p1.y;
+                        
+                        // Dynamic control points based on volatility
+                        const cp1x = p1.x + dx * 0.3;
+                        const cp1y = p1.y + dy * 0.1;
+                        const cp2x = p1.x + dx * 0.7;
+                        const cp2y = p2.y - dy * 0.1;
                         
                         ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
                     }
                     
-                    // Gradient for the line
-                    const gradient = ctx.createLinearGradient(0, 0, width, 0);
-                    gradient.addColorStop(0, 'rgba(0, 145, 218, 0.8)');
-                    gradient.addColorStop(0.5, 'rgba(0, 209, 140, 0.8)');
-                    gradient.addColorStop(1, 'rgba(255, 77, 77, 0.8)');
-                    
-                    ctx.strokeStyle = gradient;
-                    ctx.lineWidth = 2;
                     ctx.stroke();
                     
-                    // Fill under the curve
+                    // Fill under the curve with gradient
                     ctx.lineTo(this.points[this.points.length - 1].x, height);
                     ctx.lineTo(this.points[0].x, height);
                     ctx.closePath();
                     
                     const fillGradient = ctx.createLinearGradient(0, 0, 0, height);
-                    fillGradient.addColorStop(0, 'rgba(0, 145, 218, 0.1)');
+                    fillGradient.addColorStop(0, 'rgba(0, 145, 218, 0.15)');
+                    fillGradient.addColorStop(0.5, 'rgba(0, 145, 218, 0.05)');
                     fillGradient.addColorStop(1, 'rgba(0, 145, 218, 0.01)');
                     
                     ctx.fillStyle = fillGradient;
                     ctx.fill();
+                    
+                    // Draw subtle glow effect
+                    ctx.shadowColor = 'rgba(0, 145, 218, 0.3)';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.stroke();
+                    ctx.shadowColor = 'transparent'; // Reset shadow
                 }
                 
-                // Update points for animation
-                this.time += 0.01;
+                // Update points for animation with improved movement
+                this.time += 0.015; // Slightly faster animation
                 
-                // Move points to the left and add new ones
+                // Move all points to the left
                 this.points.forEach((point, i) => {
-                    point.x -= 0.5;
+                    point.x -= 0.8; // Slightly faster movement
                     
-                    // Add some noise
-                    point.y += Math.sin(this.time + i * 0.1) * point.volatility;
-                    point.y = Math.max(height * 0.2, Math.min(height * 0.8, point.y));
+                    // Add natural-looking movement with noise
+                    const noise = Math.sin(this.time * 2 + i * 0.05) * point.volatility * 0.5;
+                    const drift = Math.sin(this.time * 0.5 + i * 0.02) * 3;
                     
-                    // Remove points that have moved off screen
-                    if (point.x < -10) {
+                    point.y += noise + drift;
+                    
+                    // Keep within reasonable bounds
+                    point.y = Math.max(height * 0.1, Math.min(height * 0.9, point.y));
+                    
+                    // Update color based on direction
+                    const nextPoint = this.points[i + 1];
+                    if (nextPoint) {
+                        point.color = point.y > nextPoint.y ? '#FF4D4D' : '#00D18C';
+                    }
+                    
+                    // When point moves off left edge, reposition to right with new random data
+                    if (point.x < -20) {
                         const lastPoint = this.points[this.points.length - 1];
-                        point.x = lastPoint.x + (width / (this.points.length - 1));
-                        point.y = lastPoint.y + (Math.random() - 0.5) * 40;
-                        point.volatility = Math.random() * 10;
+                        
+                        // More realistic repositioning - don't create straight lines
+                        const newY = lastPoint.y + (Math.random() - 0.5) * 60;
+                        
+                        point.x = lastPoint.x + (width / (this.points.length - 1)) + 20;
+                        point.y = Math.max(height * 0.15, Math.min(height * 0.85, newY));
+                        point.volatility = 5 + Math.random() * 20;
+                        point.momentum = (Math.random() - 0.5) * 2;
+                        
+                        // Occasionally add spikes when repositioning
+                        if (Math.random() < 0.1) {
+                            point.y += (Math.random() - 0.5) * 50;
+                        }
                     }
                 });
                 
-                // Sort by x position
+                // Sort by x position to maintain order
                 this.points.sort((a, b) => a.x - b.x);
+                
+                // Ensure we always have points spanning the full width
+                const firstPoint = this.points[0];
+                const lastPoint = this.points[this.points.length - 1];
+                
+                if (lastPoint.x < width) {
+                    // Add new point at the end if needed
+                    const newY = lastPoint.y + (Math.random() - 0.5) * 40;
+                    this.points.push({
+                        x: lastPoint.x + (width / (this.points.length - 1)),
+                        y: Math.max(height * 0.15, Math.min(height * 0.85, newY)),
+                        color: newY > lastPoint.y ? '#FF4D4D' : '#00D18C',
+                        volatility: 5 + Math.random() * 15,
+                        momentum: (Math.random() - 0.5) * 2
+                    });
+                }
             }
             
             animate() {
