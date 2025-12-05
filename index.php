@@ -59,7 +59,7 @@ require_once 'includes/header.php';
         .transparent-hero {
             position: relative;
             background: transparent !important;
-            min-height: 80vh; /* Reduced to bring content higher */
+            min-height: 80vh;
             overflow: hidden;
         }
         
@@ -185,7 +185,7 @@ require_once 'includes/header.php';
     </nav>
 
     <!-- Transparent Hero Banner with Dynamic Effects -->
-    <section class="transparent-hero" style="padding-top: 60px;"> <!-- Reduced padding -->
+    <section class="transparent-hero" style="padding-top: 60px;">
         <!-- Stock Chart Background -->
         <div class="stock-chart-container">
             <canvas id="stockChart" class="chart-canvas"></canvas>
@@ -196,8 +196,8 @@ require_once 'includes/header.php';
         
         <!-- Content Overlay - No visible box -->
         <div class="container h-100">
-            <div class="row align-items-start justify-content-center h-100"> <!-- align-items-start instead of align-items-center -->
-                <div class="col-lg-10 col-xl-8 mt-5"> <!-- Added mt-5 to move closer to top -->
+            <div class="row align-items-start justify-content-center h-100">
+                <div class="col-lg-10 col-xl-8 mt-5">
                     <div class="text-center">
                         <h1 class="display-4 fw-bold mb-4">
                             Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span>
@@ -205,26 +205,6 @@ require_once 'includes/header.php';
                         <p class="lead mb-4 text-light">
                             AccuTradingSignals is an intelligence engine that decodes market events to provide a predictive trading edge. We combine rigorous quantitative finance—analyzing metrics like options volatility surfaces and futures term structures—with advanced machine learning models that interpret news sentiment and social narratives. This allows us to identify triggers, model cross-asset reactions, and forecast their ripple effects into equity markets.
                         </p>
-                        <!-- Removed buttons -->
-                    </div>
-                    
-                    <!-- Live Data Ticker -->
-                    <div class="row mt-4 justify-content-center">
-                        <div class="col-md-8">
-                            <div class="card bg-dark border-nasdaq-blue opacity-75">
-                                <div class="card-body p-2">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="d-flex align-items-center">
-                                            <span class="badge bg-nasdaq-blue me-2">LIVE</span>
-                                            <small class="text-light">Market Signals</small>
-                                        </div>
-                                        <div id="liveTicker" class="text-end">
-                                            <small class="text-success">Loading real-time data...</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -791,43 +771,6 @@ require_once 'includes/header.php';
             }
         }
         
-        // Live Ticker
-        class LiveTicker {
-            constructor(elementId) {
-                this.element = document.getElementById(elementId);
-                this.symbols = [
-                    { symbol: 'AAPL', price: 182.63, change: 1.24 },
-                    { symbol: 'TSLA', price: 204.99, change: -2.31 },
-                    { symbol: 'MSFT', price: 404.87, change: 0.87 },
-                    { symbol: 'NVDA', price: 880.08, change: 12.45 },
-                    { symbol: 'GOOGL', price: 141.15, change: -0.32 }
-                ];
-                this.currentIndex = 0;
-                this.start();
-            }
-            
-            start() {
-                this.update();
-                setInterval(() => this.update(), 3000);
-            }
-            
-            update() {
-                const data = this.symbols[this.currentIndex];
-                const isPositive = data.change >= 0;
-                const changeColor = isPositive ? 'text-success' : 'text-danger';
-                const changeIcon = isPositive ? '↗' : '↘';
-                
-                this.element.innerHTML = `
-                    <span class="${changeColor} fw-bold">${data.symbol} $${data.price.toFixed(2)}</span>
-                    <span class="${changeColor} ms-2">
-                        ${changeIcon} ${Math.abs(data.change).toFixed(2)} (${(Math.abs(data.change)/data.price*100).toFixed(2)}%)
-                    </span>
-                `;
-                
-                this.currentIndex = (this.currentIndex + 1) % this.symbols.length;
-            }
-        }
-        
         // Initialize effects when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize stock chart
@@ -835,9 +778,6 @@ require_once 'includes/header.php';
             
             // Initialize neural network effect
             new NeuralNetworkEffect('neuralNetwork');
-            
-            // Initialize live ticker
-            new LiveTicker('liveTicker');
             
             // Original API consumer functionality
             fetchLiveSignalPreview();
