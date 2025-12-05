@@ -450,7 +450,7 @@ require_once 'includes/header.php';
     
     <!-- Advanced Visual Effects -->
     <script>
-        // Stock Chart Generator
+        // Stock Chart Generator - Updated to remove grid lines
         class StockChart {
             constructor(canvasId) {
                 this.canvas = document.getElementById(canvasId);
@@ -511,27 +511,7 @@ require_once 'includes/header.php';
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
                 ctx.fillRect(0, 0, width, height);
                 
-                // Draw grid
-                ctx.strokeStyle = 'rgba(0, 145, 218, 0.1)';
-                ctx.lineWidth = 1;
-                
-                // Horizontal grid lines
-                for (let i = 0; i <= 10; i++) {
-                    const y = (i / 10) * height;
-                    ctx.beginPath();
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(width, y);
-                    ctx.stroke();
-                }
-                
-                // Vertical grid lines
-                for (let i = 0; i <= 20; i++) {
-                    const x = (i / 20) * width;
-                    ctx.beginPath();
-                    ctx.moveTo(x, 0);
-                    ctx.lineTo(x, height);
-                    ctx.stroke();
-                }
+                // REMOVED GRID LINES - No horizontal or vertical grid lines
                 
                 // Draw stock line
                 if (this.points.length > 1) {
