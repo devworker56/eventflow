@@ -19,6 +19,9 @@ require_once 'includes/header.php';
     <!-- Custom CSS -->
     <link href="assets/css/custom.css" rel="stylesheet">
     
+    <!-- Three.js for 3D effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <!-- NASDAQ Color Theme -->
     <style>
         :root {
@@ -52,13 +55,87 @@ require_once 'includes/header.php';
             color: white;
         }
         
-        .centered-hero {
-            text-align: center;
+        /* Transparent Hero Styles */
+        .transparent-hero {
+            position: relative;
+            background: transparent !important;
+            min-height: 100vh;
+            overflow: hidden;
         }
-        .centered-hero .lead {
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .stock-chart-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            z-index: 1;
+        }
+        
+        #neuralNetwork {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        .chart-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .data-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--nasdaq-blue), transparent);
+            transform-origin: left center;
+            pointer-events: none;
+        }
+        
+        .floating-number {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: var(--nasdaq-green);
+            font-size: 14px;
+            text-shadow: 0 0 10px currentColor;
+            pointer-events: none;
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -117,33 +194,57 @@ require_once 'includes/header.php';
         </div>
     </nav>
 
-    <!-- Centered Hero Banner -->
-    <section class="hero-banner position-relative centered-hero" style="height: 50vh; min-height: 400px;">
+    <!-- Transparent Hero Banner with Dynamic Effects -->
+    <section class="transparent-hero" style="padding-top: 100px;">
+        <!-- Stock Chart Background -->
+        <div class="stock-chart-container">
+            <canvas id="stockChart" class="chart-canvas"></canvas>
+        </div>
+        
+        <!-- Neural Network / Particle Effect -->
+        <div id="neuralNetwork"></div>
+        
+        <!-- Content Overlay -->
         <div class="container h-100">
-            <div class="row h-100 align-items-center justify-content-center">
-                <div class="col-lg-10 col-xl-8">
-                    <h1 class="display-4 fw-bold mb-4">
-                        Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span>
-                    </h1>
-                    <p class="lead mb-4">
-                        AccuTradingSignals is an intelligence engine that decodes market events to provide a predictive trading edge. We combine rigorous quantitative finance—analyzing metrics like options volatility surfaces and futures term structures—with advanced machine learning models that interpret news sentiment and social narratives. This allows us to identify triggers, model cross-asset reactions, and forecast their ripple effects into equity markets.
-                    </p>
-                    <div class="d-flex flex-wrap gap-3 justify-content-center">
-                        <a href="register.php" class="btn btn-nasdaq-blue btn-lg px-4">
-                            <i class="bi bi-lightning-charge-fill me-2"></i>Get Started
-                        </a>
-                        <a href="#cross-asset-analysis" class="btn btn-outline-light btn-lg px-4">
-                            <i class="bi bi-play-circle me-2"></i>See How It Works
-                        </a>
+            <div class="row align-items-center justify-content-center h-100">
+                <div class="col-lg-8">
+                    <div class="hero-content text-center">
+                        <h1 class="display-4 fw-bold mb-4">
+                            Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span>
+                        </h1>
+                        <p class="lead mb-4">
+                            AccuTradingSignals is an intelligence engine that decodes market events to provide a predictive trading edge. We combine rigorous quantitative finance—analyzing metrics like options volatility surfaces and futures term structures—with advanced machine learning models that interpret news sentiment and social narratives. This allows us to identify triggers, model cross-asset reactions, and forecast their ripple effects into equity markets.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3 justify-content-center">
+                            <a href="register.php" class="btn btn-nasdaq-blue btn-lg px-4">
+                                <i class="bi bi-lightning-charge-fill me-2"></i>Get Started
+                            </a>
+                            <a href="#cross-asset-analysis" class="btn btn-outline-light btn-lg px-4">
+                                <i class="bi bi-play-circle me-2"></i>See How It Works
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Data Ticker -->
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-md-8">
+                            <div class="card bg-dark border-nasdaq-blue opacity-75">
+                                <div class="card-body p-2">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-nasdaq-blue me-2">LIVE</span>
+                                            <small class="text-light">Market Signals</small>
+                                        </div>
+                                        <div id="liveTicker" class="text-end">
+                                            <small class="text-success">Loading real-time data...</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Animated background elements -->
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: -1; overflow: hidden;">
-            <div class="floating-element" style="position: absolute; top: 20%; left: 10%; width: 100px; height: 100px; border: 2px solid var(--nasdaq-blue); opacity: 0.1; border-radius: 50%;"></div>
-            <div class="floating-element" style="position: absolute; bottom: 30%; right: 15%; width: 150px; height: 150px; border: 2px solid var(--nasdaq-green); opacity: 0.1; border-radius: 50%;"></div>
         </div>
     </section>
 
@@ -383,12 +484,380 @@ require_once 'includes/header.php';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="assets/js/api-consumer.js"></script>
+    
+    <!-- Advanced Visual Effects -->
     <script>
-        // Fetch live signal preview
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchLiveSignalPreview();
+        // Stock Chart Generator
+        class StockChart {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.points = [];
+                this.time = 0;
+                this.initialize();
+            }
             
-            // Auto-refresh every 30 seconds
+            initialize() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                
+                // Generate initial data points
+                this.generateData();
+                
+                // Start animation
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = this.canvas.parentElement.clientWidth;
+                this.canvas.height = this.canvas.parentElement.clientHeight;
+            }
+            
+            generateData() {
+                this.points = [];
+                const width = this.canvas.width;
+                const height = this.canvas.height;
+                const pointCount = 100;
+                
+                let y = height / 2;
+                let trend = 0;
+                
+                for (let i = 0; i < pointCount; i++) {
+                    trend += (Math.random() - 0.5) * 0.1;
+                    trend = Math.max(-0.5, Math.min(0.5, trend));
+                    
+                    y += trend * 5;
+                    y += (Math.random() - 0.5) * 20;
+                    y = Math.max(height * 0.2, Math.min(height * 0.8, y));
+                    
+                    this.points.push({
+                        x: (i / (pointCount - 1)) * width,
+                        y: y,
+                        color: y > height / 2 ? '#FF4D4D' : '#00D18C',
+                        volatility: Math.random() * 10
+                    });
+                }
+            }
+            
+            draw() {
+                const ctx = this.ctx;
+                const width = this.canvas.width;
+                const height = this.canvas.height;
+                
+                // Clear with slight fade effect
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, width, height);
+                
+                // Draw grid
+                ctx.strokeStyle = 'rgba(0, 145, 218, 0.1)';
+                ctx.lineWidth = 1;
+                
+                // Horizontal grid lines
+                for (let i = 0; i <= 10; i++) {
+                    const y = (i / 10) * height;
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y);
+                    ctx.stroke();
+                }
+                
+                // Vertical grid lines
+                for (let i = 0; i <= 20; i++) {
+                    const x = (i / 20) * width;
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, height);
+                    ctx.stroke();
+                }
+                
+                // Draw stock line
+                if (this.points.length > 1) {
+                    ctx.beginPath();
+                    ctx.moveTo(this.points[0].x, this.points[0].y);
+                    
+                    for (let i = 1; i < this.points.length; i++) {
+                        const p1 = this.points[i - 1];
+                        const p2 = this.points[i];
+                        
+                        // Create smooth curve
+                        const cp1x = p1.x + (p2.x - p1.x) / 3;
+                        const cp1y = p1.y;
+                        const cp2x = p1.x + 2 * (p2.x - p1.x) / 3;
+                        const cp2y = p2.y;
+                        
+                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+                    }
+                    
+                    // Gradient for the line
+                    const gradient = ctx.createLinearGradient(0, 0, width, 0);
+                    gradient.addColorStop(0, 'rgba(0, 145, 218, 0.8)');
+                    gradient.addColorStop(0.5, 'rgba(0, 209, 140, 0.8)');
+                    gradient.addColorStop(1, 'rgba(255, 77, 77, 0.8)');
+                    
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    // Fill under the curve
+                    ctx.lineTo(this.points[this.points.length - 1].x, height);
+                    ctx.lineTo(this.points[0].x, height);
+                    ctx.closePath();
+                    
+                    const fillGradient = ctx.createLinearGradient(0, 0, 0, height);
+                    fillGradient.addColorStop(0, 'rgba(0, 145, 218, 0.1)');
+                    fillGradient.addColorStop(1, 'rgba(0, 145, 218, 0.01)');
+                    
+                    ctx.fillStyle = fillGradient;
+                    ctx.fill();
+                }
+                
+                // Update points for animation
+                this.time += 0.01;
+                
+                // Move points to the left and add new ones
+                this.points.forEach((point, i) => {
+                    point.x -= 0.5;
+                    
+                    // Add some noise
+                    point.y += Math.sin(this.time + i * 0.1) * point.volatility;
+                    point.y = Math.max(height * 0.2, Math.min(height * 0.8, point.y));
+                    
+                    // Remove points that have moved off screen
+                    if (point.x < -10) {
+                        const lastPoint = this.points[this.points.length - 1];
+                        point.x = lastPoint.x + (width / (this.points.length - 1));
+                        point.y = lastPoint.y + (Math.random() - 0.5) * 40;
+                        point.volatility = Math.random() * 10;
+                    }
+                });
+                
+                // Sort by x position
+                this.points.sort((a, b) => a.x - b.x);
+            }
+            
+            animate() {
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // Neural Network / Particle System
+        class NeuralNetworkEffect {
+            constructor(containerId) {
+                this.container = document.getElementById(containerId);
+                this.particles = [];
+                this.connections = [];
+                this.initialize();
+            }
+            
+            initialize() {
+                this.createParticles();
+                this.animate();
+            }
+            
+            createParticles() {
+                const colors = [
+                    'var(--nasdaq-blue)',
+                    'var(--nasdaq-green)',
+                    'var(--nasdaq-red)',
+                    'var(--nasdaq-light-blue)'
+                ];
+                
+                // Create particle-like elements
+                for (let i = 0; i < 50; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'data-point';
+                    
+                    const size = 4 + Math.random() * 8;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.backgroundColor = color;
+                    particle.style.borderColor = color;
+                    
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    
+                    this.container.appendChild(particle);
+                    
+                    this.particles.push({
+                        element: particle,
+                        x: parseFloat(particle.style.left),
+                        y: parseFloat(particle.style.top),
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        color: color,
+                        size: size,
+                        connections: []
+                    });
+                }
+                
+                // Create floating numbers
+                for (let i = 0; i < 20; i++) {
+                    const number = document.createElement('div');
+                    number.className = 'floating-number';
+                    number.textContent = this.generateStockNumber();
+                    number.style.left = `${Math.random() * 100}%`;
+                    number.style.top = `${Math.random() * 100}%`;
+                    
+                    this.container.appendChild(number);
+                    
+                    this.particles.push({
+                        element: number,
+                        x: parseFloat(number.style.left),
+                        y: parseFloat(number.style.top),
+                        vx: (Math.random() - 0.5) * 0.2,
+                        vy: (Math.random() - 0.5) * 0.2,
+                        isNumber: true,
+                        value: number.textContent
+                    });
+                }
+            }
+            
+            generateStockNumber() {
+                const symbols = ['AAPL', 'TSLA', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META'];
+                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                const change = (Math.random() > 0.5 ? '+' : '-') + 
+                             (Math.random() * 5).toFixed(2) + '%';
+                return `${symbol} ${change}`;
+            }
+            
+            updateParticles() {
+                const containerWidth = this.container.clientWidth;
+                const containerHeight = this.container.clientHeight;
+                
+                this.particles.forEach(particle => {
+                    // Update position
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    // Bounce off walls
+                    if (particle.x < 0 || particle.x > 100) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > 100) particle.vy *= -1;
+                    
+                    // Keep within bounds
+                    particle.x = Math.max(0, Math.min(100, particle.x));
+                    particle.y = Math.max(0, Math.min(100, particle.y));
+                    
+                    // Update element position
+                    particle.element.style.left = `${particle.x}%`;
+                    particle.element.style.top = `${particle.y}%`;
+                    
+                    // Update number values occasionally
+                    if (particle.isNumber && Math.random() < 0.02) {
+                        particle.value = this.generateStockNumber();
+                        particle.element.textContent = particle.value;
+                    }
+                });
+                
+                // Create connections between nearby particles
+                this.updateConnections();
+            }
+            
+            updateConnections() {
+                // Remove old connections
+                this.connections.forEach(conn => conn.element.remove());
+                this.connections = [];
+                
+                // Create new connections between nearby particles
+                for (let i = 0; i < this.particles.length; i++) {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const p1 = this.particles[i];
+                        const p2 = this.particles[j];
+                        
+                        // Calculate distance
+                        const dx = (p2.x - p1.x) * this.container.clientWidth / 100;
+                        const dy = (p2.y - p1.y) * this.container.clientHeight / 100;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        // Connect if particles are close enough
+                        if (distance < 150 && Math.random() < 0.3) {
+                            const connection = document.createElement('div');
+                            connection.className = 'connection-line';
+                            
+                            const angle = Math.atan2(dy, dx);
+                            const length = distance;
+                            
+                            connection.style.width = `${length}px`;
+                            connection.style.left = `${p1.x}%`;
+                            connection.style.top = `${p1.y}%`;
+                            connection.style.transform = `rotate(${angle}rad)`;
+                            connection.style.opacity = (1 - distance / 150) * 0.5;
+                            
+                            // Use gradient based on particle colors
+                            if (!p1.isNumber && !p2.isNumber) {
+                                connection.style.background = 
+                                    `linear-gradient(90deg, ${p1.color}, ${p2.color})`;
+                            }
+                            
+                            this.container.appendChild(connection);
+                            this.connections.push({
+                                element: connection,
+                                p1: p1,
+                                p2: p2
+                            });
+                        }
+                    }
+                }
+            }
+            
+            animate() {
+                this.updateParticles();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // Live Ticker
+        class LiveTicker {
+            constructor(elementId) {
+                this.element = document.getElementById(elementId);
+                this.symbols = [
+                    { symbol: 'AAPL', price: 182.63, change: 1.24 },
+                    { symbol: 'TSLA', price: 204.99, change: -2.31 },
+                    { symbol: 'MSFT', price: 404.87, change: 0.87 },
+                    { symbol: 'NVDA', price: 880.08, change: 12.45 },
+                    { symbol: 'GOOGL', price: 141.15, change: -0.32 }
+                ];
+                this.currentIndex = 0;
+                this.start();
+            }
+            
+            start() {
+                this.update();
+                setInterval(() => this.update(), 3000);
+            }
+            
+            update() {
+                const data = this.symbols[this.currentIndex];
+                const isPositive = data.change >= 0;
+                const changeColor = isPositive ? 'text-success' : 'text-danger';
+                const changeIcon = isPositive ? '↗' : '↘';
+                
+                this.element.innerHTML = `
+                    <span class="${changeColor} fw-bold">${data.symbol} $${data.price.toFixed(2)}</span>
+                    <span class="${changeColor} ms-2">
+                        ${changeIcon} ${Math.abs(data.change).toFixed(2)} (${(Math.abs(data.change)/data.price*100).toFixed(2)}%)
+                    </span>
+                `;
+                
+                this.currentIndex = (this.currentIndex + 1) % this.symbols.length;
+            }
+        }
+        
+        // Initialize effects when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize stock chart
+            new StockChart('stockChart');
+            
+            // Initialize neural network effect
+            new NeuralNetworkEffect('neuralNetwork');
+            
+            // Initialize live ticker
+            new LiveTicker('liveTicker');
+            
+            // Original API consumer functionality
+            fetchLiveSignalPreview();
             setInterval(fetchLiveSignalPreview, 30000);
         });
         

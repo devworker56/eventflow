@@ -10,6 +10,7 @@ require_once 'includes/header.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AccuTrading Signals - AI-Powered Event Intelligence</title>
+    <meta name="description" content="Decode derivatives intelligence for superior equity predictions with AI-powered cross-asset analysis.">
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -50,14 +51,23 @@ require_once 'includes/header.php';
             background-color: var(--nasdaq-blue);
             color: white;
         }
+        
+        .centered-hero {
+            text-align: center;
+        }
+        .centered-hero .lead {
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
-    <!-- Fixed Navigation Bar -->
+    <!-- Fixed Navigation Bar - Simplified version -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top border-bottom border-nasdaq-blue">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
-                <img src="assets/images/logo.png" alt="EventFlow" height="40" class="me-2">
+                <img src="assets/images/logo.png" alt="AccuTrading Signals" height="40" class="me-2">
                 <span class="fw-bold text-nasdaq-blue">AccuTrading</span>
                 <span class="text-light ms-1">Signals</span>
             </a>
@@ -70,9 +80,6 @@ require_once 'includes/header.php';
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="features.php">Features</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="pricing.php">Pricing</a>
@@ -102,74 +109,46 @@ require_once 'includes/header.php';
                             <a class="nav-link" href="login.php">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-nasdaq-blue ms-2" href="register.php">Start Free Trial</a>
+                            <a class="btn btn-nasdaq-blue ms-2" href="register.php">Get Started</a>
                         </li>
                     <?php endif; ?>
                 </ul>
             </div>
         </div>
     </nav>
-    <!-- Half-height Hero Banner -->
-<section class="hero-banner position-relative" style="height: 50vh; min-height: 400px;">
-    <div class="container h-100">
-        <div class="row h-100 align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-4">
-                    Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span> for Superior Equity Predictions
-                </h1>
-                <p class="lead mb-4">
-                    AccuTradingSignals is an intelligence engine that decodes market events to provide a predictive trading edge. We combine rigorous quantitative finance—analyzing metrics like options volatility surfaces and futures term structures—with advanced machine learning models that interpret news sentiment and social narratives. This allows us to identify triggers, model cross-asset reactions, and forecast their ripple effects into equity markets.
-                </p>
-                <div class="d-flex flex-wrap gap-3">
-                    <a href="register.php" class="btn btn-nasdaq-blue btn-lg px-4">
-                        <i class="bi bi-lightning-charge-fill me-2"></i>Start Free Trial
-                    </a>
-                    <a href="#how-it-works" class="btn btn-outline-light btn-lg px-4">
-                        <i class="bi bi-play-circle me-2"></i>See How It Works
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-4 d-none d-lg-block">
-                <div class="card bg-dark border-nasdaq-blue">
-                    <div class="card-body">
-                        <h5 class="card-title text-nasdaq-blue">Live Equity Signal</h5>
-                        <div class="signal-preview">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="symbol-icon bg-nasdaq-blue rounded-circle p-2 me-3">
-                                    <i class="bi bi-graph-up text-white"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0">AAPL</h6>
-                                    <small class="text-muted">Earnings in 2 days</small>
-                                </div>
-                                <div class="ms-auto">
-                                    <span class="badge bg-success">+82% Confidence</span>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <small class="text-muted">Derivatives Signal:</small>
-                                <p class="mb-1">Options IV suggests 8.2% move priced in</p>
-                                <small class="text-muted">Our AI predicts: <strong class="text-success">+5.3%</strong></p>
-                            </div>
-                            <button class="btn btn-sm btn-outline-nasdaq-blue w-100">
-                                View Full Analysis
-                            </button>
-                        </div>
+
+    <!-- Centered Hero Banner -->
+    <section class="hero-banner position-relative centered-hero" style="height: 50vh; min-height: 400px;">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center justify-content-center">
+                <div class="col-lg-10 col-xl-8">
+                    <h1 class="display-4 fw-bold mb-4">
+                        Decode <span class="text-nasdaq-blue">Derivatives Intelligence</span>
+                    </h1>
+                    <p class="lead mb-4">
+                        AccuTradingSignals is an intelligence engine that decodes market events to provide a predictive trading edge. We combine rigorous quantitative finance—analyzing metrics like options volatility surfaces and futures term structures—with advanced machine learning models that interpret news sentiment and social narratives. This allows us to identify triggers, model cross-asset reactions, and forecast their ripple effects into equity markets.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center">
+                        <a href="register.php" class="btn btn-nasdaq-blue btn-lg px-4">
+                            <i class="bi bi-lightning-charge-fill me-2"></i>Get Started
+                        </a>
+                        <a href="#cross-asset-analysis" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-play-circle me-2"></i>See How It Works
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Animated background elements -->
-    <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: -1; overflow: hidden;">
-        <div class="floating-element" style="position: absolute; top: 20%; left: 10%; width: 100px; height: 100px; border: 2px solid var(--nasdaq-blue); opacity: 0.1; border-radius: 50%;"></div>
-        <div class="floating-element" style="position: absolute; bottom: 30%; right: 15%; width: 150px; height: 150px; border: 2px solid var(--nasdaq-green); opacity: 0.1; border-radius: 50%;"></div>
-    </div>
-</section>
+        
+        <!-- Animated background elements -->
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: -1; overflow: hidden;">
+            <div class="floating-element" style="position: absolute; top: 20%; left: 10%; width: 100px; height: 100px; border: 2px solid var(--nasdaq-blue); opacity: 0.1; border-radius: 50%;"></div>
+            <div class="floating-element" style="position: absolute; bottom: 30%; right: 15%; width: 150px; height: 150px; border: 2px solid var(--nasdaq-green); opacity: 0.1; border-radius: 50%;"></div>
+        </div>
+    </section>
 
-    <!-- Features Section -->
-    <section class="py-5 bg-dark">
+    <!-- Enhanced Cross-Asset Analysis Section -->
+    <section class="py-5 bg-dark" id="cross-asset-analysis">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="display-5 fw-bold mb-3">Cross-Asset Event Intelligence</h2>
@@ -177,50 +156,87 @@ require_once 'includes/header.php';
             </div>
             
             <div class="row g-4">
-                <div class="col-md-3">
+                <!-- Equities & ETFs -->
+                <div class="col-md-6 col-lg-3">
                     <div class="card h-100 border-nasdaq-blue bg-black">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                <i class="bi bi-graph-up text-nasdaq-blue" style="font-size: 2rem;"></i>
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-graph-up text-nasdaq-blue" style="font-size: 2.5rem;"></i>
                             </div>
-                            <h5 class="card-title">Equities & ETFs</h5>
-                            <p class="card-text text-muted">Direct exposure analysis with sector rotation signals</p>
+                            <h4 class="card-title text-center mb-4">Equities & ETFs</h4>
+                            <p class="card-text text-center text-muted mb-4">Direct exposure analysis with sector rotation signals</p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3">
-                    <div class="card h-100 border-nasdaq-blue bg-black">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                <i class="bi bi-activity text-nasdaq-green" style="font-size: 2rem;"></i>
+                <!-- Options Markets with Detailed Signals -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-nasdaq-green bg-black">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-activity text-nasdaq-green" style="font-size: 2.5rem;"></i>
                             </div>
-                            <h5 class="card-title">Options Markets</h5>
-                            <p class="card-text text-muted">Volatility surface forecasting and skew analysis</p>
+                            <h4 class="card-title text-center mb-3">Options Intelligence</h4>
+                            <p class="card-text text-center mb-4">
+                                Options traders price in earnings surprises, M&A rumors, and product launches <strong>days before</strong> stock traders react.
+                            </p>
+                            <div class="mt-3">
+                                <h6 class="text-nasdaq-green mb-3">Key Signals:</h6>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Implied Volatility Surfaces</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Put/Call Ratio Extremes</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Skew & Smile Analysis</li>
+                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Unusual Options Activity</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3">
-                    <div class="card h-100 border-nasdaq-blue bg-black">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                <i class="bi bi-currency-exchange text-nasdaq-red" style="font-size: 2rem;"></i>
+                <!-- FX & Futures with Detailed Signals -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-nasdaq-red bg-black">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-currency-exchange text-nasdaq-red" style="font-size: 2.5rem;"></i>
                             </div>
-                            <h5 class="card-title">FX & Futures</h5>
-                            <p class="card-text text-muted">Term structure and physical market impacts</p>
+                            <h4 class="card-title text-center mb-3">Futures & FX Signals</h4>
+                            <p class="card-text text-center mb-4">
+                                Futures term structure predicts <strong>sector rotations</strong> and <strong>market regimes</strong> that determine which stocks will outperform.
+                            </p>
+                            <div class="mt-3">
+                                <h6 class="text-nasdaq-red mb-3">Key Signals:</h6>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>VIX Futures Curve</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Commodity Term Structure</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Currency Futures Positioning</li>
+                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Index Futures Roll</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3">
-                    <div class="card h-100 border-nasdaq-blue bg-black">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                <i class="bi bi-cash-coin text-nasdaq-light-blue" style="font-size: 2rem;"></i>
+                <!-- Fixed Income with Detailed Signals -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-nasdaq-light-blue bg-black">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-cash-coin text-nasdaq-light-blue" style="font-size: 2.5rem;"></i>
                             </div>
-                            <h5 class="card-title">Fixed Income</h5>
-                            <p class="card-text text-muted">Rate sensitivity and credit spread implications</p>
+                            <h4 class="card-title text-center mb-3">Fixed Income Alpha</h4>
+                            <p class="card-text text-center mb-4">
+                                Credit spreads and yield curve shifts forecast <strong>market stress</strong> and <strong>risk appetite</strong> that drive equity valuations.
+                            </p>
+                            <div class="mt-3">
+                                <h6 class="text-nasdaq-light-blue mb-3">Key Signals:</h6>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Credit Spread Changes</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Yield Curve Steepening/Flattening</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>TED Spread Analysis</li>
+                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Inflation Expectations</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -228,153 +244,101 @@ require_once 'includes/header.php';
         </div>
     </section>
 
-    <!-- Dashboard Preview -->
+    <!-- Platform Features -->
     <section class="py-5 bg-black">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h2 class="display-5 fw-bold mb-4">Professional Dashboard</h2>
-                    <div class="mb-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="bi bi-check-circle-fill text-nasdaq-green me-3" style="font-size: 1.5rem;"></i>
-                            <div>
-                                <h5 class="mb-0">Real-time Signal Feed</h5>
-                                <p class="text-muted mb-0">Live updates from Modal AI engine</p>
-                            </div>
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Platform Capabilities</h2>
+                <p class="lead text-muted">Everything you need in one integrated dashboard</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-speedometer2 text-nasdaq-blue" style="font-size: 2rem;"></i>
                         </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="bi bi-check-circle-fill text-nasdaq-green me-3" style="font-size: 1.5rem;"></i>
-                            <div>
-                                <h5 class="mb-0">Cross-Asset Correlation Matrix</h5>
-                                <p class="text-muted mb-0">Visualize connections across markets</p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="bi bi-check-circle-fill text-nasdaq-green me-3" style="font-size: 1.5rem;"></i>
-                            <div>
-                                <h5 class="mb-0">Portfolio Impact Analysis</h5>
-                                <p class="text-muted mb-0">See how events affect your positions</p>
-                            </div>
+                        <div class="flex-grow-1 ms-4">
+                            <h4>Real-time Signal Dashboard</h4>
+                            <p class="text-muted">
+                                Live feed of equity signals generated from derivatives data. Filter by sector, 
+                                confidence level, or time horizon.
+                            </p>
                         </div>
                     </div>
-                    <a href="dashboard/" class="btn btn-nasdaq-blue btn-lg">
-                        <i class="bi bi-arrow-right-circle me-2"></i>View Sample Dashboard
-                    </a>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-graph-up-arrow text-nasdaq-green" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-4">
+                            <h4>Backtesting Engine</h4>
+                            <p class="text-muted">
+                                Test our signals against historical data. See win rates, Sharpe ratios, and 
+                                maximum drawdowns for any strategy.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-bell text-nasdaq-red" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-4">
+                            <h4>Smart Alerts</h4>
+                            <p class="text-muted">
+                                Get notified via email, SMS, or webhook when key derivatives signals trigger 
+                                for your watchlist stocks.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card bg-dark border-nasdaq-blue">
-                        <div class="card-body p-0">
-                            <div class="dashboard-preview">
-                                <!-- Mock dashboard preview -->
-                                <div class="p-3 border-bottom border-nasdaq-blue d-flex justify-content-between">
-                                    <span class="text-nasdaq-blue">Live Signals</span>
-                                    <span class="badge bg-nasdaq-blue">Real-time</span>
-                                </div>
-                                <div class="p-3">
-                                    <div class="signal-item mb-3">
-                                        <div class="d-flex justify-content-between">
-                                            <strong class="text-light">FED Rate Decision</strong>
-                                            <span class="text-nasdaq-green">+82% Confidence</span>
-                                        </div>
-                                        <small class="text-muted">Impact: Equities ↓, USD ↑, Bonds ↑</small>
-                                    </div>
-                                    <div class="signal-item mb-3">
-                                        <div class="d-flex justify-content-between">
-                                            <strong class="text-light">AAPL Earnings</strong>
-                                            <span class="text-nasdaq-red">-67% Confidence</span>
-                                        </div>
-                                        <small class="text-muted">Options IV suggests 8.2% move priced</small>
-                                    </div>
-                                    <div class="signal-item">
-                                        <div class="d-flex justify-content-between">
-                                            <strong class="text-light">CPI Report</strong>
-                                            <span class="text-nasdaq-blue">+91% Confidence</span>
-                                        </div>
-                                        <small class="text-muted">Market underpricing inflation risk</small>
-                                    </div>
-                                </div>
-                            </div>
+                
+                <div class="col-md-6">
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-diagram-3 text-nasdaq-light-blue" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-4">
+                            <h4>Cross-Asset Correlation Matrix</h4>
+                            <p class="text-muted">
+                                Visualize how options, futures, and fixed income data correlate with 
+                                individual stocks and sectors.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-shield-check text-nasdaq-blue" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-4">
+                            <h4>Risk Management Tools</h4>
+                            <p class="text-muted">
+                                Calculate position sizes, stop losses, and hedge ratios based on 
+                                derivatives-implied volatility and correlation.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-code-slash text-nasdaq-green" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-4">
+                            <h4>API Access</h4>
+                            <p class="text-muted">
+                                Integrate our signals into your own trading systems, research platforms, 
+                                or portfolio management tools.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Pricing Preview -->
-<section class="py-5 bg-dark">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Choose Your Plan</h2>
-            <p class="lead text-muted">Start with 14-day free trial, no credit card required</p>
-        </div>
-        
-        <div class="row g-4">
-            <?php
-            $pdo = getDBConnection();
-            $stmt = $pdo->query("SELECT * FROM subscription_plans ORDER BY monthly_price");
-            $plans = $stmt->fetchAll();
-            
-            foreach($plans as $plan):
-                // Map database tier names to display names
-                $display_name = match($plan['tier_name']) {
-                    'explorer' => 'Standard',
-                    'professional' => 'Pro',
-                    'institutional' => 'Premium',
-                    default => ucfirst($plan['tier_name'])
-                };
-                
-                // Determine styling based on tier
-                $is_popular = $plan['tier_name'] == 'professional'; // Pro is most popular
-                $border_class = $is_popular ? 'nasdaq-blue border-3' : 'secondary';
-                $btn_class = match($plan['tier_name']) {
-                    'professional' => 'nasdaq-blue', // Pro gets primary button
-                    'institutional' => 'outline-nasdaq-blue', // Premium gets outline
-                    default => 'outline-light' // Standard gets basic
-                };
-            ?>
-            <div class="col-md-4">
-                <div class="card h-100 border-<?php echo $border_class; ?>">
-                    <?php if($is_popular): ?>
-                    <div class="card-header bg-nasdaq-blue text-center py-3">
-                        <span class="badge bg-dark">MOST POPULAR</span>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <div class="card-body">
-                        <h3 class="card-title text-center mb-4"><?php echo $display_name; ?></h3>
-                        <div class="text-center mb-4">
-                            <span class="display-4 fw-bold">$<?php echo $plan['monthly_price']; ?></span>
-                            <span class="text-muted">/month</span>
-                            <div class="text-muted small">$<?php echo $plan['annual_price']; ?> billed annually</div>
-                        </div>
-                        
-                        <ul class="list-unstyled mb-4">
-                            <?php
-                            $features = json_decode($plan['features'], true);
-                            foreach($features as $feature):
-                            ?>
-                            <li class="mb-2">
-                                <i class="bi bi-check-circle-fill text-nasdaq-green me-2"></i>
-                                <?php echo htmlspecialchars($feature); ?>
-                            </li>
-                            <?php endforeach; ?>
-                        </ul>
-                        
-                        <div class="text-center">
-                            <a href="subscription/checkout.php?plan=<?php echo $plan['tier_name']; ?>" 
-                               class="btn btn-<?php echo $btn_class; ?> w-100">
-                                Start Free Trial
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
 
-    <!-- Half-height Footer -->
+    <!-- Footer -->
     <footer class="bg-black py-4" style="height: 40vh; min-height: 200px;">
         <div class="container h-100">
             <div class="row h-100">
@@ -387,7 +351,7 @@ require_once 'includes/header.php';
                 <div class="col-md-2">
                     <h6 class="text-light mb-3">Product</h6>
                     <ul class="list-unstyled">
-                        <li><a href="features.php" class="text-muted small text-decoration-none">Features</a></li>
+                        <li><a href="#cross-asset-analysis" class="text-muted small text-decoration-none">Features</a></li>
                         <li><a href="pricing.php" class="text-muted small text-decoration-none">Pricing</a></li>
                         <li><a href="#demo" class="text-muted small text-decoration-none">Demo</a></li>
                     </ul>
