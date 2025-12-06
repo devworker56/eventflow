@@ -211,103 +211,131 @@ require_once 'includes/header.php';
         </div>
     </section>
 
-    <!-- Enhanced Cross-Asset Analysis Section -->
-    <section class="py-5 bg-dark" id="cross-asset-analysis">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Cross-Asset Event Intelligence</h2>
-                <p class="lead text-muted">Integrated analysis across 7 asset classes</p>
+<!-------------------------- Enhanced Cross-Asset Analysis Section -------------------------------->
+<!-- Updated Cross-Asset & Event Analysis Section -->
+<section class="py-5 bg-dark" id="market-intelligence">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Multi-Dimensional Market Intelligence</h2>
+            <p class="lead text-muted">Integrating sentiment analysis, derivatives data, and cross-asset signals for superior equity predictions</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Event Sentiment Analysis -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-nasdaq-blue bg-black">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-activity text-nasdaq-blue" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4 class="card-title text-center mb-3">Event Sentiment Intelligence</h4>
+                        <p class="card-text text-center mb-4">
+                            Analyzing corporate earnings, economic data, and geopolitical events to gauge market sentiment <strong>before</strong> price movements.
+                        </p>
+                        <div class="mt-3">
+                            <h6 class="text-nasdaq-blue mb-3">Key Analysis:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Earnings Call Sentiment</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Economic Data Impact</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Geopolitical Risk Assessment</li>
+                                <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Regulatory Change Analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div class="row g-4">
-                <!-- Equities & ETFs -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-nasdaq-blue bg-black">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <i class="bi bi-graph-up text-nasdaq-blue" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <h4 class="card-title text-center mb-4">Equities & ETFs</h4>
-                            <p class="card-text text-center text-muted mb-4">Direct exposure analysis with sector rotation signals</p>
+            <!-- Options Markets -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-nasdaq-green bg-black">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-graph-up text-nasdaq-green" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4 class="card-title text-center mb-3">Options Intelligence</h4>
+                        <p class="card-text text-center mb-4">
+                            Options traders price in events <strong>days before</strong> stock traders react. We decode these signals.
+                        </p>
+                        <div class="mt-3">
+                            <h6 class="text-nasdaq-green mb-3">Key Signals:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Implied Volatility Surfaces</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Put/Call Ratio Extremes</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Skew & Smile Analysis</li>
+                                <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Unusual Options Activity</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Options Markets with Detailed Signals -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-nasdaq-green bg-black">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <i class="bi bi-activity text-nasdaq-green" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <h4 class="card-title text-center mb-3">Options Intelligence</h4>
-                            <p class="card-text text-center mb-4">
-                                Options traders price in earnings surprises, M&A rumors, and product launches <strong>days before</strong> stock traders react.
-                            </p>
-                            <div class="mt-3">
-                                <h6 class="text-nasdaq-green mb-3">Key Signals:</h6>
-                                <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Implied Volatility Surfaces</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Put/Call Ratio Extremes</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Skew & Smile Analysis</li>
-                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Unusual Options Activity</li>
-                                </ul>
-                            </div>
+            </div>
+            
+            <!-- Futures & FX -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-nasdaq-red bg-black">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-currency-exchange text-nasdaq-red" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4 class="card-title text-center mb-3">Futures & FX Signals</h4>
+                        <p class="card-text text-center mb-4">
+                            Futures term structure predicts <strong>sector rotations</strong> and <strong>market regimes</strong> weeks in advance.
+                        </p>
+                        <div class="mt-3">
+                            <h6 class="text-nasdaq-red mb-3">Key Signals:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>VIX Futures Curve</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Commodity Term Structure</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Currency Futures Positioning</li>
+                                <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Index Futures Roll Dynamics</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                
-                <!-- FX & Futures with Detailed Signals -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-nasdaq-red bg-black">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <i class="bi bi-currency-exchange text-nasdaq-red" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <h4 class="card-title text-center mb-3">Futures & FX Signals</h4>
-                            <p class="card-text text-center mb-4">
-                                Futures term structure predicts <strong>sector rotations</strong> and <strong>market regimes</strong> that determine which stocks will outperform.
-                            </p>
-                            <div class="mt-3">
-                                <h6 class="text-nasdaq-red mb-3">Key Signals:</h6>
-                                <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>VIX Futures Curve</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Commodity Term Structure</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Currency Futures Positioning</li>
-                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Index Futures Roll</li>
-                                </ul>
-                            </div>
+            </div>
+            
+            <!-- Fixed Income -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-nasdaq-light-blue bg-black">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-cash-coin text-nasdaq-light-blue" style="font-size: 2.5rem;"></i>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Fixed Income with Detailed Signals -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-nasdaq-light-blue bg-black">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <i class="bi bi-cash-coin text-nasdaq-light-blue" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <h4 class="card-title text-center mb-3">Fixed Income Alpha</h4>
-                            <p class="card-text text-center mb-4">
-                                Credit spreads and yield curve shifts forecast <strong>market stress</strong> and <strong>risk appetite</strong> that drive equity valuations.
-                            </p>
-                            <div class="mt-3">
-                                <h6 class="text-nasdaq-light-blue mb-3">Key Signals:</h6>
-                                <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Credit Spread Changes</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Yield Curve Steepening/Flattening</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>TED Spread Analysis</li>
-                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Inflation Expectations</li>
-                                </ul>
-                            </div>
+                        <h4 class="card-title text-center mb-3">Fixed Income Alpha</h4>
+                        <p class="card-text text-center mb-4">
+                            Credit spreads and yield curves forecast <strong>market stress</strong> and <strong>risk appetite</strong> shifts.
+                        </p>
+                        <div class="mt-3">
+                            <h6 class="text-nasdaq-light-blue mb-3">Key Signals:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Credit Spread Changes</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Yield Curve Analysis</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>TED Spread Monitoring</li>
+                                <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Inflation Expectations</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
+        
+        <!-- Integration Explanation -->
+        <div class="row mt-5">
+            <div class="col-lg-8 mx-auto">
+                <div class="card border-nasdaq-blue bg-black">
+                    <div class="card-body text-center">
+                        <h4 class="text-nasdaq-blue mb-3">The Integrated Advantage</h4>
+                        <p class="text-light mb-0">
+                            By combining <strong>event sentiment analysis</strong> with <strong>derivatives intelligence</strong>, we create a complete picture of market dynamics. 
+                            Corporate events tell us <em>what</em> might happen, while options and futures data tell us <em>how</em> and <em>when</em> the market expects it to happen.
+                            This multi-dimensional approach provides 3-5 day foresight into equity movements.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>   
+<!------------------------------------------------------------------------------------------------>
     <!-- Platform Features -->
     <section class="py-5 bg-black">
         <div class="container">
@@ -450,7 +478,7 @@ require_once 'includes/header.php';
     
     <!-- Advanced Visual Effects -->
     <script>
-        // Stock Chart Generator
+        // Stock Chart Generator - Improved with better randomness and smoother transitions
         class StockChart {
             constructor(canvasId) {
                 this.canvas = document.getElementById(canvasId);
@@ -474,30 +502,43 @@ require_once 'includes/header.php';
             resize() {
                 this.canvas.width = this.canvas.parentElement.clientWidth;
                 this.canvas.height = this.canvas.parentElement.clientHeight;
+                this.generateData(); // Regenerate data on resize
             }
             
             generateData() {
                 this.points = [];
                 const width = this.canvas.width;
                 const height = this.canvas.height;
-                const pointCount = 100;
+                const pointCount = 150; // Increased for smoother curve
                 
                 let y = height / 2;
                 let trend = 0;
+                let momentum = 0;
                 
                 for (let i = 0; i < pointCount; i++) {
-                    trend += (Math.random() - 0.5) * 0.1;
-                    trend = Math.max(-0.5, Math.min(0.5, trend));
+                    // More realistic stock movement simulation
+                    momentum += (Math.random() - 0.5) * 0.15;
+                    momentum = Math.max(-1, Math.min(1, momentum));
                     
-                    y += trend * 5;
-                    y += (Math.random() - 0.5) * 20;
-                    y = Math.max(height * 0.2, Math.min(height * 0.8, y));
+                    trend += momentum * 0.05;
+                    trend += (Math.random() - 0.5) * 0.08;
+                    trend = Math.max(-0.6, Math.min(0.6, trend));
+                    
+                    y += trend * 8;
+                    y += (Math.random() - 0.5) * 25; // Increased randomness
+                    y = Math.max(height * 0.15, Math.min(height * 0.85, y));
+                    
+                    // Add occasional larger spikes
+                    if (Math.random() < 0.05) {
+                        y += (Math.random() - 0.5) * 40;
+                    }
                     
                     this.points.push({
                         x: (i / (pointCount - 1)) * width,
                         y: y,
                         color: y > height / 2 ? '#FF4D4D' : '#00D18C',
-                        volatility: Math.random() * 10
+                        volatility: 5 + Math.random() * 15, // Increased volatility range
+                        momentum: momentum
                     });
                 }
             }
@@ -508,33 +549,24 @@ require_once 'includes/header.php';
                 const height = this.canvas.height;
                 
                 // Clear with slight fade effect
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.03)'; // Slightly lighter fade
                 ctx.fillRect(0, 0, width, height);
-                
-                // Draw grid
-                ctx.strokeStyle = 'rgba(0, 145, 218, 0.1)';
-                ctx.lineWidth = 1;
-                
-                // Horizontal grid lines
-                for (let i = 0; i <= 10; i++) {
-                    const y = (i / 10) * height;
-                    ctx.beginPath();
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(width, y);
-                    ctx.stroke();
-                }
-                
-                // Vertical grid lines
-                for (let i = 0; i <= 20; i++) {
-                    const x = (i / 20) * width;
-                    ctx.beginPath();
-                    ctx.moveTo(x, 0);
-                    ctx.lineTo(x, height);
-                    ctx.stroke();
-                }
                 
                 // Draw stock line
                 if (this.points.length > 1) {
+                    // Create gradient for the line
+                    const gradient = ctx.createLinearGradient(0, 0, width, 0);
+                    gradient.addColorStop(0, 'rgba(0, 145, 218, 0.9)');
+                    gradient.addColorStop(0.3, 'rgba(0, 209, 140, 0.9)');
+                    gradient.addColorStop(0.7, 'rgba(255, 77, 77, 0.9)');
+                    gradient.addColorStop(1, 'rgba(0, 178, 255, 0.9)');
+                    
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 2.5; // Slightly thicker line
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    
+                    // Draw main line with smooth curve
                     ctx.beginPath();
                     ctx.moveTo(this.points[0].x, this.points[0].y);
                     
@@ -542,60 +574,102 @@ require_once 'includes/header.php';
                         const p1 = this.points[i - 1];
                         const p2 = this.points[i];
                         
-                        // Create smooth curve
-                        const cp1x = p1.x + (p2.x - p1.x) / 3;
-                        const cp1y = p1.y;
-                        const cp2x = p1.x + 2 * (p2.x - p1.x) / 3;
-                        const cp2y = p2.y;
+                        // Calculate control points for smoother curves
+                        const dx = p2.x - p1.x;
+                        const dy = p2.y - p1.y;
+                        
+                        // Dynamic control points based on volatility
+                        const cp1x = p1.x + dx * 0.3;
+                        const cp1y = p1.y + dy * 0.1;
+                        const cp2x = p1.x + dx * 0.7;
+                        const cp2y = p2.y - dy * 0.1;
                         
                         ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
                     }
                     
-                    // Gradient for the line
-                    const gradient = ctx.createLinearGradient(0, 0, width, 0);
-                    gradient.addColorStop(0, 'rgba(0, 145, 218, 0.8)');
-                    gradient.addColorStop(0.5, 'rgba(0, 209, 140, 0.8)');
-                    gradient.addColorStop(1, 'rgba(255, 77, 77, 0.8)');
-                    
-                    ctx.strokeStyle = gradient;
-                    ctx.lineWidth = 2;
                     ctx.stroke();
                     
-                    // Fill under the curve
+                    // Fill under the curve with gradient
                     ctx.lineTo(this.points[this.points.length - 1].x, height);
                     ctx.lineTo(this.points[0].x, height);
                     ctx.closePath();
                     
                     const fillGradient = ctx.createLinearGradient(0, 0, 0, height);
-                    fillGradient.addColorStop(0, 'rgba(0, 145, 218, 0.1)');
+                    fillGradient.addColorStop(0, 'rgba(0, 145, 218, 0.15)');
+                    fillGradient.addColorStop(0.5, 'rgba(0, 145, 218, 0.05)');
                     fillGradient.addColorStop(1, 'rgba(0, 145, 218, 0.01)');
                     
                     ctx.fillStyle = fillGradient;
                     ctx.fill();
+                    
+                    // Draw subtle glow effect
+                    ctx.shadowColor = 'rgba(0, 145, 218, 0.3)';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.stroke();
+                    ctx.shadowColor = 'transparent'; // Reset shadow
                 }
                 
-                // Update points for animation
-                this.time += 0.01;
+                // Update points for animation with improved movement
+                this.time += 0.015; // Slightly faster animation
                 
-                // Move points to the left and add new ones
+                // Move all points to the left
                 this.points.forEach((point, i) => {
-                    point.x -= 0.5;
+                    point.x -= 0.8; // Slightly faster movement
                     
-                    // Add some noise
-                    point.y += Math.sin(this.time + i * 0.1) * point.volatility;
-                    point.y = Math.max(height * 0.2, Math.min(height * 0.8, point.y));
+                    // Add natural-looking movement with noise
+                    const noise = Math.sin(this.time * 2 + i * 0.05) * point.volatility * 0.5;
+                    const drift = Math.sin(this.time * 0.5 + i * 0.02) * 3;
                     
-                    // Remove points that have moved off screen
-                    if (point.x < -10) {
+                    point.y += noise + drift;
+                    
+                    // Keep within reasonable bounds
+                    point.y = Math.max(height * 0.1, Math.min(height * 0.9, point.y));
+                    
+                    // Update color based on direction
+                    const nextPoint = this.points[i + 1];
+                    if (nextPoint) {
+                        point.color = point.y > nextPoint.y ? '#FF4D4D' : '#00D18C';
+                    }
+                    
+                    // When point moves off left edge, reposition to right with new random data
+                    if (point.x < -20) {
                         const lastPoint = this.points[this.points.length - 1];
-                        point.x = lastPoint.x + (width / (this.points.length - 1));
-                        point.y = lastPoint.y + (Math.random() - 0.5) * 40;
-                        point.volatility = Math.random() * 10;
+                        
+                        // More realistic repositioning - don't create straight lines
+                        const newY = lastPoint.y + (Math.random() - 0.5) * 60;
+                        
+                        point.x = lastPoint.x + (width / (this.points.length - 1)) + 20;
+                        point.y = Math.max(height * 0.15, Math.min(height * 0.85, newY));
+                        point.volatility = 5 + Math.random() * 20;
+                        point.momentum = (Math.random() - 0.5) * 2;
+                        
+                        // Occasionally add spikes when repositioning
+                        if (Math.random() < 0.1) {
+                            point.y += (Math.random() - 0.5) * 50;
+                        }
                     }
                 });
                 
-                // Sort by x position
+                // Sort by x position to maintain order
                 this.points.sort((a, b) => a.x - b.x);
+                
+                // Ensure we always have points spanning the full width
+                const firstPoint = this.points[0];
+                const lastPoint = this.points[this.points.length - 1];
+                
+                if (lastPoint.x < width) {
+                    // Add new point at the end if needed
+                    const newY = lastPoint.y + (Math.random() - 0.5) * 40;
+                    this.points.push({
+                        x: lastPoint.x + (width / (this.points.length - 1)),
+                        y: Math.max(height * 0.15, Math.min(height * 0.85, newY)),
+                        color: newY > lastPoint.y ? '#FF4D4D' : '#00D18C',
+                        volatility: 5 + Math.random() * 15,
+                        momentum: (Math.random() - 0.5) * 2
+                    });
+                }
             }
             
             animate() {
