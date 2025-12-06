@@ -211,103 +211,131 @@ require_once 'includes/header.php';
         </div>
     </section>
 
-    <!-- Enhanced Cross-Asset Analysis Section -->
-    <section class="py-5 bg-dark" id="cross-asset-analysis">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Cross-Asset Event Intelligence</h2>
-                <p class="lead text-muted">Integrated analysis across 7 asset classes</p>
+<!-------------------------- Enhanced Cross-Asset Analysis Section -------------------------------->
+<!-- Updated Cross-Asset & Event Analysis Section -->
+<section class="py-5 bg-dark" id="market-intelligence">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Multi-Dimensional Market Intelligence</h2>
+            <p class="lead text-muted">Integrating sentiment analysis, derivatives data, and cross-asset signals for superior equity predictions</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Event Sentiment Analysis -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-nasdaq-blue bg-black">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-activity text-nasdaq-blue" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4 class="card-title text-center mb-3">Event Sentiment Intelligence</h4>
+                        <p class="card-text text-center mb-4">
+                            Analyzing corporate earnings, economic data, and geopolitical events to gauge market sentiment <strong>before</strong> price movements.
+                        </p>
+                        <div class="mt-3">
+                            <h6 class="text-nasdaq-blue mb-3">Key Analysis:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Earnings Call Sentiment</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Economic Data Impact</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Geopolitical Risk Assessment</li>
+                                <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Regulatory Change Analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div class="row g-4">
-                <!-- Equities & ETFs -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-nasdaq-blue bg-black">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <i class="bi bi-graph-up text-nasdaq-blue" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <h4 class="card-title text-center mb-4">Equities & ETFs</h4>
-                            <p class="card-text text-center text-muted mb-4">Direct exposure analysis with sector rotation signals</p>
+            <!-- Options Markets -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-nasdaq-green bg-black">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-graph-up text-nasdaq-green" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4 class="card-title text-center mb-3">Options Intelligence</h4>
+                        <p class="card-text text-center mb-4">
+                            Options traders price in events <strong>days before</strong> stock traders react. We decode these signals.
+                        </p>
+                        <div class="mt-3">
+                            <h6 class="text-nasdaq-green mb-3">Key Signals:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Implied Volatility Surfaces</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Put/Call Ratio Extremes</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Skew & Smile Analysis</li>
+                                <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Unusual Options Activity</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Options Markets with Detailed Signals -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-nasdaq-green bg-black">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <i class="bi bi-activity text-nasdaq-green" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <h4 class="card-title text-center mb-3">Options Intelligence</h4>
-                            <p class="card-text text-center mb-4">
-                                Options traders price in earnings surprises, M&A rumors, and product launches <strong>days before</strong> stock traders react.
-                            </p>
-                            <div class="mt-3">
-                                <h6 class="text-nasdaq-green mb-3">Key Signals:</h6>
-                                <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Implied Volatility Surfaces</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Put/Call Ratio Extremes</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Skew & Smile Analysis</li>
-                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Unusual Options Activity</li>
-                                </ul>
-                            </div>
+            </div>
+            
+            <!-- Futures & FX -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-nasdaq-red bg-black">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-currency-exchange text-nasdaq-red" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h4 class="card-title text-center mb-3">Futures & FX Signals</h4>
+                        <p class="card-text text-center mb-4">
+                            Futures term structure predicts <strong>sector rotations</strong> and <strong>market regimes</strong> weeks in advance.
+                        </p>
+                        <div class="mt-3">
+                            <h6 class="text-nasdaq-red mb-3">Key Signals:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>VIX Futures Curve</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Commodity Term Structure</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Currency Futures Positioning</li>
+                                <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Index Futures Roll Dynamics</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                
-                <!-- FX & Futures with Detailed Signals -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-nasdaq-red bg-black">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <i class="bi bi-currency-exchange text-nasdaq-red" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <h4 class="card-title text-center mb-3">Futures & FX Signals</h4>
-                            <p class="card-text text-center mb-4">
-                                Futures term structure predicts <strong>sector rotations</strong> and <strong>market regimes</strong> that determine which stocks will outperform.
-                            </p>
-                            <div class="mt-3">
-                                <h6 class="text-nasdaq-red mb-3">Key Signals:</h6>
-                                <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>VIX Futures Curve</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Commodity Term Structure</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Currency Futures Positioning</li>
-                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Index Futures Roll</li>
-                                </ul>
-                            </div>
+            </div>
+            
+            <!-- Fixed Income -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-nasdaq-light-blue bg-black">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-cash-coin text-nasdaq-light-blue" style="font-size: 2.5rem;"></i>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Fixed Income with Detailed Signals -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-nasdaq-light-blue bg-black">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <i class="bi bi-cash-coin text-nasdaq-light-blue" style="font-size: 2.5rem;"></i>
-                            </div>
-                            <h4 class="card-title text-center mb-3">Fixed Income Alpha</h4>
-                            <p class="card-text text-center mb-4">
-                                Credit spreads and yield curve shifts forecast <strong>market stress</strong> and <strong>risk appetite</strong> that drive equity valuations.
-                            </p>
-                            <div class="mt-3">
-                                <h6 class="text-nasdaq-light-blue mb-3">Key Signals:</h6>
-                                <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Credit Spread Changes</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Yield Curve Steepening/Flattening</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>TED Spread Analysis</li>
-                                    <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Inflation Expectations</li>
-                                </ul>
-                            </div>
+                        <h4 class="card-title text-center mb-3">Fixed Income Alpha</h4>
+                        <p class="card-text text-center mb-4">
+                            Credit spreads and yield curves forecast <strong>market stress</strong> and <strong>risk appetite</strong> shifts.
+                        </p>
+                        <div class="mt-3">
+                            <h6 class="text-nasdaq-light-blue mb-3">Key Signals:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Credit Spread Changes</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Yield Curve Analysis</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-nasdaq-green me-2"></i>TED Spread Monitoring</li>
+                                <li><i class="bi bi-check-circle text-nasdaq-green me-2"></i>Inflation Expectations</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
+        
+        <!-- Integration Explanation -->
+        <div class="row mt-5">
+            <div class="col-lg-8 mx-auto">
+                <div class="card border-nasdaq-blue bg-black">
+                    <div class="card-body text-center">
+                        <h4 class="text-nasdaq-blue mb-3">The Integrated Advantage</h4>
+                        <p class="text-light mb-0">
+                            By combining <strong>event sentiment analysis</strong> with <strong>derivatives intelligence</strong>, we create a complete picture of market dynamics. 
+                            Corporate events tell us <em>what</em> might happen, while options and futures data tell us <em>how</em> and <em>when</em> the market expects it to happen.
+                            This multi-dimensional approach provides 3-5 day foresight into equity movements.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>   
+<!------------------------------------------------------------------------------------------------>
     <!-- Platform Features -->
     <section class="py-5 bg-black">
         <div class="container">
