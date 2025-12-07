@@ -5,7 +5,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top border-bottom border-nasdaq-blue">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
-            <img src="assets/images/logo.png" alt="AccuTrading Signals" height="40">
+            <img src="assets/images/logo.png" alt="AccuTrading Signals" height="40" class="me-2">
+            <span class="fw-bold text-nasdaq-blue">AccuTrading</span>
+            <span class="text-light ms-1">Signals</span>
         </a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
